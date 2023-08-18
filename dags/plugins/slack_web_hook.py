@@ -40,9 +40,8 @@ def on_failure_callback(context):
 # slack에 알림 보내기
 def send_message_to_a_slack_channel(message):
     slack_url = Variable.get("slack_url")
-    # url = f"https://hooks.slack.com/services/{slack_url}" # CorpAnalytica Alert
+    url = f"https://hooks.slack.com/services/{slack_url}" # CorpAnalytica Alert
 
-    url = "https://hooks.slack.com/services/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" # Test Alert
     headers = {
         'content-type': 'application/json',
     }
