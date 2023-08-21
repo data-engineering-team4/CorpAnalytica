@@ -50,7 +50,7 @@ with DAG(
 
         params = {
             "query": corpname,
-            "display": 50,
+            "display": 100,
             "sort": "date",
             "start": 1,
         }

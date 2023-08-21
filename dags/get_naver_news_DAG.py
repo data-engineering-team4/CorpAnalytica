@@ -57,10 +57,8 @@ with DAG(
         url = "https://openapi.naver.com/v1/search/news"
 
         headers = {
-            # "X-Naver-Client-Id": Variable.get("naver_client_id"),
-            # "X-Naver-Client-Secret": Variable.get("naver_client_secret")
-            "X-Naver-Client-Id": "Rfhz3hEwU61AvhO0GZtt",
-            "X-Naver-Client-Secret": "0T1p8EqViy"
+            "X-Naver-Client-Id": Variable.get("naver_client_id"),
+            "X-Naver-Client-Secret": Variable.get("naver_client_secret")
         }
 
         try:
