@@ -126,7 +126,7 @@ with DAG(
         s3_bucket = "de-4-3",
         s3_key = csv_filename,
         schema = "raw_data",
-        table = "enterprise_basic_test",
+        table = "corp_basic",
         copy_options=['csv', 'IGNOREHEADER 1'],
         method = 'REPLACE', # Full Refresh
         redshift_conn_id = "redshift_conn",
