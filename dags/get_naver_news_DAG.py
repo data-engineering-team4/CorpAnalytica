@@ -121,10 +121,6 @@ with DAG(
                 logging.info(f"{i} : {corpname}의 뉴스 데이터 {len(corp_news_data_list)}개 저장")
                 time.sleep(0.11) # 네이버 API 제한량 때문
 
-                # 임시
-                if i >= 100:
-                    break
-
         return total_corp_news_data_list
 
 
