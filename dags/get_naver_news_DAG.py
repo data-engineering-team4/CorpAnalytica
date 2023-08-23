@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python import PythonOperator
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.models import Variable
 from airflow.models import XCom
 
@@ -100,6 +101,7 @@ with DAG(
 
         with open("data/corp_basic/corp_basic.csv", 'r', encoding='utf-8') as f:
             csv_reader = csv.reader(f)
+            next(csv_reader) # 헤더 무시
 
             # 가져온 기업들의 뉴스 데이터를 모두 total_corp_news_data_list에 합쳐서 저장
             total_corp_news_data_list = []
@@ -109,7 +111,7 @@ with DAG(
                 corp_news_data_list = get_news_data_from_naver_searchAPI(corpname, stock_code, logical_date_kst)
                 total_corp_news_data_list += corp_news_data_list
                 logging.info(f"{i} : {corpname}의 뉴스 데이터 {len(corp_news_data_list)}개 저장")
-                time.sleep(0.2) # 네이버 API 제한량 때문
+                time.sleep(0.11) # 네이버 API 제한량 때문
 
         return total_corp_news_data_list
 
@@ -124,7 +126,6 @@ with DAG(
         news_data_list = make_corps_news_list(logical_date_kst)
 
         # csv 파일 생성
-
         csv_filename = "data/naver_news/naver_news_" + str(logical_date_kst.date()) + ".csv"
         kwargs['ti'].xcom_push(key='csv_filename', value=csv_filename)
 
@@ -172,7 +173,7 @@ with DAG(
         s3_bucket = "de-4-3",
         s3_key = "{{ ti.xcom_pull(task_ids='make_news_data_csv_task', key='csv_filename') }}",
         schema = "raw_data",
-        table = "news_data_logical_date_test",
+        table = "naver_news",
         copy_options=["csv", "IGNOREHEADER 1"],
         redshift_conn_id = "redshift_conn",
         aws_conn_id = "S3_conn",    
@@ -182,4 +183,10 @@ with DAG(
         dag = dag
     )
 
-    make_news_data_csv_task >> upload_naver_news_csv_to_s3_task >> news_data_s3_to_redshift_task
+    trigger_get_news_article_task = TriggerDagRunOperator(
+        task_id='trigger_get_news_article_task',
+        trigger_dag_id='news_article_crawling_DAG',
+        execution_date="{{ execution_date }}"
+    )
+
+    make_news_data_csv_task >> upload_naver_news_csv_to_s3_task >> news_data_s3_to_redshift_task >> trigger_get_news_article_task
