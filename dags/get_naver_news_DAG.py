@@ -5,6 +5,7 @@ from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOp
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.models import Variable
 from airflow.models import XCom
+from airflow.configuration import conf
 
 from datetime import datetime, timedelta
 import pendulum
@@ -15,6 +16,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import logging
+from statsd import StatsClient
 from plugins import slack_web_hook
 
 
@@ -24,7 +26,7 @@ default_args = {
     'owner': 'Sun',
     # 'retries': 1,
     # 'retry_delay': timedelta(minutes=2),
-    'on_failure_callback': slack_web_hook.on_failure_callback,
+    # 'on_failure_callback': slack_web_hook.on_failure_callback,
     # 'on_success_callback': slack_web_hook.on_success_callback,
 }
 
@@ -40,12 +42,17 @@ with DAG(
     retry = Retry(connect=3, backoff_factor=1)
     session.mount('https://', HTTPAdapter(max_retries=retry))
 
+    STATSD_HOST = conf.get("metrics", "statsd_host")
+    STATSD_PORT = conf.get("metrics", "statsd_port")
+    STATSD_PREFIX = conf.get("metrics", "statsd_prefix")
+    client = StatsClient(host=STATSD_HOST, port=STATSD_PORT, prefix=STATSD_PREFIX)
+
 
     # Function
     
 
     # 네이버 뉴스 API로부터 해당 기업의 뉴스 데이터 가져오기
-    def get_news_data_from_naver_searchAPI(corpname, stock_code, logical_date_kst):
+    def get_news_data_from_naver_searchAPI(corpname, stock_code, logical_date_kst, metric_name):
 
         params = {
             "query": corpname,
@@ -84,6 +91,7 @@ with DAG(
                     }
                     
                     corp_news_data_list.append(news_data_dic)
+                    client.incr(metric_name)
 
                 # 만약 백 번째 데이터의 pubDate가 execution_date보다 크다면(미래라면) params의 start에 + 100하도록 하고 다시 요청, start가 901이라면 멈추기.  < 이 부분이 앞으로 가야할 것.
 
@@ -97,7 +105,7 @@ with DAG(
 
 
     # 상장 기업목록들을 가져와서 모든 뉴스 데이터를 리스트에 저장
-    def make_corps_news_list(logical_date_kst):
+    def make_corps_news_list(logical_date_kst, metric_name):
 
         with open("data/corp_basic/corp_basic.csv", 'r', encoding='utf-8') as f:
             csv_reader = csv.reader(f)
@@ -108,7 +116,7 @@ with DAG(
             for i, line in enumerate(csv_reader):
                 corpname = line[1]
                 stock_code = line[2]
-                corp_news_data_list = get_news_data_from_naver_searchAPI(corpname, stock_code, logical_date_kst)
+                corp_news_data_list = get_news_data_from_naver_searchAPI(corpname, stock_code, logical_date_kst, metric_name)
                 total_corp_news_data_list += corp_news_data_list
                 logging.info(f"{i} : {corpname}의 뉴스 데이터 {len(corp_news_data_list)}개 저장")
                 time.sleep(0.11) # 네이버 API 제한량 때문
@@ -118,12 +126,15 @@ with DAG(
 
     # 가져온 뉴스 데이터들을 CSV 파일로 저장
     def get_naver_news_csv(**kwargs):
+
+        metric_name = f'dag.{kwargs["dag"].dag_id}.{kwargs["task"].task_id}.news_counter'
+
         logical_date_kst = kwargs['logical_date'] + timedelta(hours=9)
 
         logging.info(f"---logical_date_KST = {logical_date_kst}---")
         logging.info(f"---뉴스 데이터를 해당 날짜에서 수집합니다.---")
 
-        news_data_list = make_corps_news_list(logical_date_kst)
+        news_data_list = make_corps_news_list(logical_date_kst, metric_name)
 
         # csv 파일 생성
         csv_filename = "data/naver_news/naver_news_" + str(logical_date_kst.date()) + ".csv"
