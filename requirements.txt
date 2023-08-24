@@ -1,2 +1,6 @@
 Django==4.2.4
 statsd
+apache-airflow[docker,amazon]
+typing
+s3fs
+pandas
