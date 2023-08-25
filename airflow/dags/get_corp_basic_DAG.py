@@ -38,7 +38,7 @@ with DAG(
 ) as dag:
 
     session = requests.Session()
-    retry = Retry(connect=3, backoff_factor=1)
+    retry = Retry(total= 3, connect=3, backoff_factor=0.3)
     session.mount('https://', HTTPAdapter(max_retries=retry))
 
     csv_filename = "data/corp_basic/corp_basic.csv"
