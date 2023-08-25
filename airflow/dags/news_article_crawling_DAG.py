@@ -41,6 +41,7 @@ with DAG(
     session.mount('https://', HTTPAdapter(max_retries=retry))
     session.mount('http://', HTTPAdapter(max_retries=retry))
     
+    
     # Function
 
 
@@ -62,7 +63,6 @@ with DAG(
             for line in csv_reader:
                 corpname = line[1]
                 link = line[3]
-                pubdate = line[5]
                 article = news_crawling_from_link(link)
 
                 # 뉴스 기사 데이터를 가져오지 못했으면 다음으로 스킵
@@ -74,14 +74,12 @@ with DAG(
                     'corpname' : corpname,
                     'link' : link,
                     'article' : article,
-                    'pubdate' : pubdate
                 }
                 total_news_article_list.append(news_dic)
 
                 logging.info(f"{len(total_news_article_list)} : {corpname}의 뉴스 {line[2]} 저장")
             
             df = pd.DataFrame(total_news_article_list)
-            df['pubdate'] = pd.to_datetime(df['pubdate'])
             table = pa.Table.from_pandas(df)
             pq.write_table(table, news_article_parquet_filename)
             # df.to_csv(news_article_csv_filename, index=False, encoding='utf-8')
