@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/search_style.css' %}">
+    <script src="https://kit.fontawesome.com/51db22a717.js" crossorigin="anonymous"></script>
+    <title>CorpAnalytica</title>
+</head>
+<body>
+        {% if searched %}
+                <h1> 검색 : {{ searched }}  </h1>
+                <!-- {% for recipe in recipes %}
+                        {{ recipe.name }} <br>
+                        {{ recipe.country }} <br>
+                        {{ recipe.ingredient }} <br>
+                {% endfor %} -->
+        {% else %}
+                <h1> 검색 단어 없음</h1>
+        {% endif %}
+</body>
+</html>
