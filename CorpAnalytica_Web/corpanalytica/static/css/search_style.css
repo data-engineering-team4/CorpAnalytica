@@ -1,0 +1,8 @@
+:root{
+    --font-family: 'Apple SD Gothic Neo',arial,sans-serif;
+}  
+*{
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-family);
+}

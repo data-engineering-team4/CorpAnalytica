@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/home_style.css' %}">
+    <script src="https://kit.fontawesome.com/51db22a717.js" crossorigin="anonymous"></script>
+    <title>CorpAnalytica</title>
+</head>
+<body>
+    <section class="main-section">
+        <div class="logo-wrap">
+            <img src="{% static 'img/corpanalytica_logo.png' %}">
+        </div>
+    </section>
+
+    <section class="sub-section">
+
+
+        <form class="search-bar" method="POST" action="{% url 'search' %}">
+            {% csrf_token %}        
+            <input class="search-input" type="text" placeholder="기업이나 키워드를 검색해보세요!" name="searched" aria-label="Search">
+            <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+
+
+        <!-- <div class="search-bar">
+            <input class="search-input" type="text" placeholder="기업이나 키워드를 검색해보세요!" autofocus/>
+            <button class="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div> -->
+
+        <hr class="divison-line">
+
+        <div class="wordcloud-wrap">
+            <ul>
+                <li><img class="keyword_best_wc" src="{% static 'img/wordcloud1.png' %}"></li>
+                <li><img class="article_best_wc" src="{% static 'img/wordcloud2.png' %}"></li>
+            </ul>
+        </div>
+
+    </section>
+    <footer>
+        <div class="foot-links-wrap">
+            <div class="foot-links">
+                <ul>
+                    <li><img class="prgm-logo" src="{% static 'img/prgm-logo.png' %}"></li>
+                    <li>데이터 엔지니어링 데브코스</li>
+                    <li>4팀 3조</li>
+                    <li><a href="https://github.com/sunhokim1457">김선호</a></li>
+                    <li><a href="https://github.com/plays0708">김지석</a></li>
+                    <li><a href="https://github.com/SikHyeya">김승언</a></li>
+                </ul>
+            </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

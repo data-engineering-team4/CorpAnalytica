@@ -1,0 +1,141 @@
+:root{
+    --gray-color :#717271;
+    --light-gray-color: #cfd0d3;
+    --footer-back-color: #f1f2f1;
+    --footer-border-color: #e3e4e3;
+    --font-family: 'Apple SD Gothic Neo',arial,sans-serif;
+}  
+*{
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-family);
+}
+
+.main-section{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.main-section .logo-wrap{
+    height: 320px;
+    align-items: flex-end;
+    display: flex;
+}
+
+.main-section img{
+    height: 280px;
+}
+
+.sub-section{
+    background-color:var(--light-gray-color);
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    margin-top: 2%;
+    height: 60px;
+    border-radius: 12px;
+    border: none;
+}
+
+.search-bar .search-input {
+    flex: 1; /* 입력란이 남는 공간을 모두 차지하도록 설정 */
+    padding: 8px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 30px;
+    border: none;
+    outline: none;
+}
+
+.search-bar .search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-left: 20px;
+    height: 52px;
+    width: 52px;
+    font-size: 20px;
+}
+
+.search-bar .search-button:hover {
+    background-color: #0056b3;
+}
+
+.sub-section .divison-line{
+    border-top: 5px solid #444444;
+    border-radius: 3px;
+    margin: 30px 0px;
+    width: 80%;
+}
+
+.sub-section .wordcloud-wrap ul{
+    display: flex;
+    margin-top: 1%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+
+.sub-section .wordcloud-wrap img {
+    max-width: 100%;
+    height: auto;
+    background-color: #444444;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var( --footer-back-color);
+    font-size:15px;
+  
+}
+footer .foot-links-wrap{
+    border-top: solid 1px var(--footer-border-color);
+    padding-left: 32px;
+    line-height: 40px;
+ 
+    height: 40px;
+    display: flex;
+    flex:auto;
+}
+footer .foot-links-wrap .foot-links{
+    width:50%
+}
+footer .foot-links-wrap .foot-links ul{
+    list-style: none;
+    display: flex;
+}
+
+footer .foot-links-wrap .foot-links ul li{
+    margin-right: 10px;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+}
+
+footer .foot-links-wrap .foot-links ul li a{
+    display: block;
+    text-decoration: none;
+}
+
+footer .foot-links-wrap .foot-links img{
+    width: 30px;
+    display: flex;
+
+}
