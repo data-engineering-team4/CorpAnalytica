@@ -15,8 +15,8 @@
         </div>
     </section>
 
+    <div class="sub-section-background">
     <section class="sub-section">
-
 
         <form class="search-bar" method="POST" action="{% url 'search' %}">
             {% csrf_token %}        
@@ -24,24 +24,18 @@
             <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
         </form>
 
-
-        <!-- <div class="search-bar">
-            <input class="search-input" type="text" placeholder="기업이나 키워드를 검색해보세요!" autofocus/>
-            <button class="search-button">
-                <i class="fas fa-search"></i>
-            </button>
-        </div> -->
-
         <hr class="divison-line">
 
         <div class="wordcloud-wrap">
             <ul>
-                <li><img class="keyword_best_wc" src="{% static 'img/wordcloud1.png' %}"></li>
-                <li><img class="article_best_wc" src="{% static 'img/wordcloud2.png' %}"></li>
+                <img class="keyword_best_wc" src="{% static 'img/wordcloud1.png' %}">
+                <img class="article_best_wc" src="{% static 'img/wordcloud2.png' %}">
             </ul>
         </div>
 
     </section>
+    </div>
+
     <footer>
         <div class="foot-links-wrap">
             <div class="foot-links">

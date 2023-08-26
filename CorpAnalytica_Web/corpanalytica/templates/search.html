@@ -9,15 +9,77 @@
     <title>CorpAnalytica</title>
 </head>
 <body>
-        {% if searched %}
-                <h1> 검색 : {{ searched }}  </h1>
-                <!-- {% for recipe in recipes %}
-                        {{ recipe.name }} <br>
-                        {{ recipe.country }} <br>
-                        {{ recipe.ingredient }} <br>
-                {% endfor %} -->
-        {% else %}
-                <h1> 검색 단어 없음</h1>
-        {% endif %}
+
+        <section class="search-section">
+                <form class="search-bar" method="POST" action="{% url 'search' %}">
+                        {% csrf_token %}  
+
+                        {% if searched %}
+                                <input class="search-input" type="text" value= "{{ searched }}" name="searched" aria-label="Search">
+                        {% else %}
+                                <input class="search-input" type="text" placeholder="기업이나 키워드를 검색해보세요!" name="searched" aria-label="Search">
+                        {% endif %}
+                                <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
+
+                </form>
+
+                <hr class="divison-line">
+        </section>
+
+        <section class="search-result-section">
+
+                <div class="search-container">
+
+                        <div class="searched_item">
+                                <h2>기업 이름 1</h2>
+                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <p class="tags">태그: IT, 개발, 기술</p>
+                        </div>
+
+                        <div class="searched_item">
+                                <h2>기업 이름 2</h2>
+                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <p class="tags">태그: IT, 개발, 기술</p>
+                        </div>
+
+                        <div class="searched_item">
+                                <h2>기업 이름 3</h2>
+                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <p class="tags">태그: IT, 개발, 기술</p>
+                        </div>
+
+
+                        <div class="searched_item">
+                                <h2>뉴스 이름 1</h2>
+                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <p class="tags">태그: IT, 개발, 기술</p>
+                        </div>
+
+                        <div class="searched_item">
+                                <h2>뉴스 이름 2</h2>
+                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <p class="tags">태그: IT, 개발, 기술</p>
+                        </div>
+
+                        <div class="searched_item">
+                                <h2>뉴스 이름 3</h2>
+                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <p class="tags">태그: IT, 개발, 기술</p>
+                        </div>
+                </div>
+        </section>
+
+
+
+
+
+
+<!-- 검색결과 나열하기 -->
+<!-- {% for recipe in recipes %}
+        {{ recipe.name }} <br>
+        {{ recipe.country }} <br>
+        {{ recipe.ingredient }} <br>
+{% endfor %} -->
+
 </body>
 </html>
