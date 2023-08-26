@@ -33,12 +33,19 @@ on:
 env:
   AWS_REGION: us-west-2                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: de-4-3-airflow          # set this to your Amazon ECR repository name
-  ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
   ECS_CLUSTER: de-4-3-ECScluster                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
-                                               # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
-                                               # containerDefinitions section of your task definition
+
+  ECS_SERVICE_SCHEDULER: de-4-3-airflow-service-scheduler           # set this to your Amazon ECS service name
+  ECS_SERVICE_WORKER: de-4-3-airflow-service-worker                 # set this to your Amazon ECS service name
+  ECS_SERVICE_WEBSERVER: de-4-3-airflow-service-webserver                 # set this to your Amazon ECS service name
+  
+  ECS_TASK_DEFINITION_SCHEDULER: .aws/de-4-3-scheduler2-revision1.json # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION_WORKER: .aws/de-4-3-worker-revision1.json
+  ECS_TASK_DEFINITION_WEBSERVER: .aws/de-4-3-webserver2-revision1.json
+
+  CONTAINER_NAME_SCHEDULER: de-4-3-airflow-scheduler           # set this to the name of the container in the containerDefinitions section of your task definition
+  CONTAINER_NAME_WORKER: de-4-3-airflow-worker           # set this to the name of the container in the containerDefinitions section of your task definition
+  CONTAINER_NAME_WEBSERVER: de-4-3-airflow-webserver           # set this to the name of the container in the containerDefinitions section of your task definition
 
 permissions:
   contents: read
@@ -73,22 +80,62 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f airflow/Dockerfile .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG airflow/
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    - name: Fill in the new image ID in the Amazon ECS task definition
-      id: task-def
+    - name: Fill in the new image ID in the Amazon ECS task definition1
+      id: task-def-scheduler
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: ${{ env.ECS_TASK_DEFINITION }}
-        container-name: ${{ env.CONTAINER_NAME }}
+        task-definition: ${{ env.ECS_TASK_DEFINITION_SCHEDULER }}
+        container-name: ${{ env.CONTAINER_NAME_SCHEDULER }}
         image: ${{ steps.build-image.outputs.image }}
 
-    - name: Deploy Amazon ECS task definition
+    - name: Fill in the new image ID in the Amazon ECS task definition2
+      id: task-def-worker
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION_WORKER }}
+        container-name: ${{ env.CONTAINER_NAME_WORKER }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Fill in the new image ID in the Amazon ECS task definition3
+      id: task-def-webserver
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION_WEBSERVER }}
+        container-name: ${{ env.CONTAINER_NAME_WEBSERVER }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition1
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: ${{ env.ECS_SERVICE }}
+        task-definition: ${{ steps.task-def-scheduler.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_SCHEDULER }}
         cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
+
+    - name: Deploy Amazon ECS task definition2
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-worker.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_WORKER }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+
+    - name: Deploy Amazon ECS task definition3
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-webserver.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_WEBSERVER }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+
+    # - name: Build, Push & Deploy
+    #   run: |
+    #     # Airflow
+    #     aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE_SCHEDULER }} --force-new-deployment
+    #     aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE_WORKER }} --force-new-deployment
+    #     aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE_WEBSERVER }} --force-new-deployment
+         
