@@ -168,3 +168,6 @@ variables.json
 
 # log directory
 logs/
+
+# AWS ECS
+task-definition-*.json
