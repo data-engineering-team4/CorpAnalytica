@@ -39,7 +39,7 @@ with DAG(
     csv_filename = "data/naver_news/news_data_total.csv"
 
     session = requests.Session()
-    retry = Retry(connect=3, backoff_factor=1)
+    retry = Retry(total= 3, connect=3, backoff_factor=0.3)
     session.mount('https://', HTTPAdapter(max_retries=retry))
 
 

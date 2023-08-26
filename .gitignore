@@ -164,8 +164,7 @@ cython_debug/
 # connection file
 connections.json
 variables.json
+.env
 
 # log directory
 logs/
-
-test*
