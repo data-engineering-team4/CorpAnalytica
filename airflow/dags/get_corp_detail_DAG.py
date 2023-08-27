@@ -1,10 +1,8 @@
 from airflow import DAG
 from airflow.models import Variable
-from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
 from airflow.operators.python import PythonOperator
-# from airflow.models import XCom
 
 from datetime import datetime, timedelta
 import datetime
@@ -15,12 +13,14 @@ import pandas as pd
 import numpy as np
 import math
 import concurrent.futures
+from plugins import slack_web_hook
 
 default_args = {
     'owner': 'SeungEonKim',
     'retries': 1,
     'retry_delay': timedelta(minutes=2),
-    #'on_failure_callback': slack.on_failure_callback
+    'on_failure_callback': slack_web_hook.on_failure_callback,
+    'on_success_callback': slack_web_hook.on_success_callback,
 }
 
 with DAG(
@@ -126,8 +126,6 @@ with DAG(
         s3_bucket = bucket_name,  # S3 버킷 이름
         s3_key=s3_key,  # S3 키
         method = "REPLACE", # Full refresh 형태
-        # schema_location=None,  # S3 스키마 위치
-        # verify=True,  # SSL 검증 여부
         dag=dag
     )
 
