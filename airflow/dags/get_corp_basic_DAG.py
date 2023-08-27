@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from airflow import DAG
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python import PythonOperator
@@ -152,7 +151,6 @@ with DAG(
         execution_date="{{ execution_date }}"
     )
 
-=======
 from airflow import DAG
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python import PythonOperator
@@ -301,6 +299,5 @@ with DAG(
         trigger_dag_id='get_naver_news_DAG',
         execution_date="{{ execution_date }}"
     )
-
->>>>>>> 6850b42ebe768f5eaf2558201aa3db43265ea6d2
+    
     get_corp_basic_csv_from_xml_task >> upload_corp_basic_csv_to_s3_task >> corp_basic_s3_to_redshift_task >> trigger_get_naver_news_task
