@@ -71,7 +71,7 @@ with DAG(
                     
                     # 주식 종목 코드가 존재하고, 기업명에 특정 문자가 없는 기업들로만 데이터 수집
                     if len(stock_code) > 1:
-                        if ('기업인수' not in corpname and '스팩' not in corpname) or corpname in corp_exception_list:
+                        if ('기업인수' not in corpname and '스팩' not in corpname and '투자회사' not in corpname) or corpname in corp_exception_list:
 
                             try: 
                                 url = f"https://opendart.fss.or.kr/api/company.json?crtfc_key={dart_api_key}&corp_code={entno}"
