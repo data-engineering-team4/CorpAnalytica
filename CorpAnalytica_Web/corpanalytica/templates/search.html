@@ -30,56 +30,17 @@
 
                 <div class="search-container">
 
-                        <div class="searched_item">
-                                <h2>기업 이름 1</h2>
-                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <p class="tags">태그: IT, 개발, 기술</p>
-                        </div>
+                        <!-- 검색결과 나열하기 -->
+                        {% for corp in corps %}
+                                <div class="searched_item">
+                                        <h2>{{ corp.corpname }}</h2>
+                                        <p>주식 종목 코드 : {{ corp.code }}</p>
+                                        <p class="tags">법인 등록 코드 : {{ corp.crno }}</p>
+                                </div>
+                        {% endfor %}
 
-                        <div class="searched_item">
-                                <h2>기업 이름 2</h2>
-                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <p class="tags">태그: IT, 개발, 기술</p>
-                        </div>
-
-                        <div class="searched_item">
-                                <h2>기업 이름 3</h2>
-                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <p class="tags">태그: IT, 개발, 기술</p>
-                        </div>
-
-
-                        <div class="searched_item">
-                                <h2>뉴스 이름 1</h2>
-                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <p class="tags">태그: IT, 개발, 기술</p>
-                        </div>
-
-                        <div class="searched_item">
-                                <h2>뉴스 이름 2</h2>
-                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <p class="tags">태그: IT, 개발, 기술</p>
-                        </div>
-
-                        <div class="searched_item">
-                                <h2>뉴스 이름 3</h2>
-                                <p>기업 설명 Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                <p class="tags">태그: IT, 개발, 기술</p>
-                        </div>
                 </div>
         </section>
-
-
-
-
-
-
-<!-- 검색결과 나열하기 -->
-<!-- {% for recipe in recipes %}
-        {{ recipe.name }} <br>
-        {{ recipe.country }} <br>
-        {{ recipe.ingredient }} <br>
-{% endfor %} -->
 
 </body>
 </html>

@@ -22,8 +22,8 @@ local_timezone = pendulum.timezone("Asia/Seoul")
 
 default_args = {
     'owner': 'Sun',
-    'retries': 1,
-    'retry_delay': timedelta(minutes=2),
+    # 'retries': 1,
+    # 'retry_delay': timedelta(minutes=2),
     'on_failure_callback': slack_web_hook.on_failure_callback,
     # 'on_success_callback': slack_web_hook.on_success_callback,
 }
@@ -45,6 +45,12 @@ with DAG(
     corp_exception_list = ["아스팩오일"]
     dart_api_key = Variable.get("dart_api_key")
 
+    stock_str_map = {
+        'K' : '코스닥',
+        'N' : '코넥스',
+        'Y' : '유가'
+    }
+
     # Function
 
     # Dart API에서 데이터 가져오기
@@ -60,25 +66,30 @@ with DAG(
                 
                 # CSV 헤더 작성
                 # 순서대로 기업고유번호, 기업명, 기업종목번호, 법인등록번호
-                csv_writer.writerow(['entno', 'corpname', 'code', 'crno'])
+                csv_writer.writerow(['entno', 'corpname', 'code', 'crno', 'stock_type'])
 
                 # stock_code(종목코드)가 있는 항목만 레코드로 csv 파일 생성
                 for item in corcode_root.iter("list"):
                     entno = item.find('corp_code').text # 기업고유번호
                     corpname = item.find('corp_name').text # 기업명
                     stock_code = item.find('stock_code').text # 기업종목번호
-
+                    
+                    try:
+                        stock_type = item.find('corp_cls').text # 주식종목코드
+                    except AttributeError:
+                        logging.info(f"{corpname}의 stock_type이 존재하지 않습니다.")
+                        continue
                     
                     # 주식 종목 코드가 존재하고, 기업명에 특정 문자가 없는 기업들로만 데이터 수집
-                    if len(stock_code) > 1:
-                        if ('기업인수' not in corpname and '스팩' not in corpname) or corpname in corp_exception_list:
+                    if len(stock_code) > 1 and stock_type != 'E':
+                        if ('기업인수' not in corpname and '스팩' not in corpname and '투자회사' not in corpname) or corpname in corp_exception_list:
 
                             try: 
                                 url = f"https://opendart.fss.or.kr/api/company.json?crtfc_key={dart_api_key}&corp_code={entno}"
                                 response = session.get(url)
                                 crno = response.json()["jurir_no"] # 법인등록번호
 
-                                csv_writer.writerow([entno, corpname, stock_code, crno])
+                                csv_writer.writerow([entno, corpname, stock_code, crno, stock_str_map[stock_type]])
                                 logging.info(f"Add to CSV : {corpname}")
 
                             except requests.exceptions.RequestException as e:

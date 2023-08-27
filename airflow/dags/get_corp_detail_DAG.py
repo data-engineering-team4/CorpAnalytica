@@ -68,7 +68,7 @@ with DAG(
         
         final = []
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             futures = [executor.submit(get_corp_info, i + 1) for i in np.arange(loop_count)]
             for future in concurrent.futures.as_completed(futures):
                 items = future.result()
