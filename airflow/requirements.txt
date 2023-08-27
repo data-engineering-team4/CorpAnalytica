@@ -3,3 +3,4 @@ typing
 s3fs
 pandas
 konlpy
+scikit-learn
