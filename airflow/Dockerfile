@@ -2,6 +2,15 @@
 ARG AIRFLOW_VERSION=2.6.2
 FROM apache/airflow:${AIRFLOW_VERSION}
 
+# Install Java and set JAVA_HOME
+RUN apt-get update && \
+    apt-get install -y default-jre && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set JAVA_HOME environment variable
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+
 # Set environment variables
 ENV AIRFLOW_HOME=/opt/airflow
 
