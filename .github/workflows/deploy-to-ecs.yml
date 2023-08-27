@@ -86,9 +86,9 @@ jobs:
 
     - name: Download task definition
       run: |
-        aws ecs describe-task-definition --task-definition de-4-3-scheduler2 --query taskDefinition > task-definition-scheduler.json
+        aws ecs describe-task-definition --task-definition de-4-3-scheduler --query taskDefinition > task-definition-scheduler.json
         aws ecs describe-task-definition --task-definition de-4-3-worker --query taskDefinition > task-definition-worker.json
-        aws ecs describe-task-definition --task-definition de-4-3-webserver2 --query taskDefinition > task-definition-webserver.json
+        aws ecs describe-task-definition --task-definition de-4-3-webserver --query taskDefinition > task-definition-webserver.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition1
       id: task-def-scheduler
