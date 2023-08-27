@@ -24,9 +24,9 @@ local_timezone = pendulum.timezone("Asia/Seoul")
 
 default_args = {
     'owner': 'Sun',
-    # 'retries': 1,
-    # 'retry_delay': timedelta(minutes=2),
-    # 'on_failure_callback': slack_web_hook.on_failure_callback,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=2),
+    'on_failure_callback': slack_web_hook.on_failure_callback,
     # 'on_success_callback': slack_web_hook.on_success_callback,
 }
 
@@ -186,7 +186,7 @@ with DAG(
         schema = "raw_data",
         table = "naver_news",
         copy_options=["csv", "IGNOREHEADER 1"],
-        redshift_conn_id = "redshift_conn",
+        redshift_conn_id = "Redshift_conn",
         aws_conn_id = "S3_conn",    
 
         method = "UPSERT",

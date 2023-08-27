@@ -15,12 +15,13 @@ import pandas as pd
 import numpy as np
 import math
 import concurrent.futures
+from plugins import slack_web_hook
 
 default_args = {
     'owner': 'SeungEonKim',
     'retries': 1,
     'retry_delay': timedelta(minutes=2),
-    #'on_failure_callback': slack.on_failure_callback
+    'on_failure_callback': slack_web_hook.on_failure_callback
 }
 
 with DAG(
