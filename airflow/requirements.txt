@@ -4,3 +4,4 @@ s3fs
 pandas
 konlpy
 statsd
+scikit-learn
