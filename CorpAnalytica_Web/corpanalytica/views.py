@@ -1,14 +1,14 @@
 from django.shortcuts import render
+from .models import *
 
 def home_view(request):
     return render(request,'home.html')
 
 def search_view(request):
     if request.method == 'POST':
-            searched = request.POST['searched']        
-            # recipes = Recipe.objects.filter(name__contains=searched) # Recipe는 임시 모델의 클래스 이름
-            # return render(request, 'searched.html', {'searched': searched, 'recipes': recipes})
-            return render(request, 'search.html', {'searched': searched})
+            searched = request.POST['searched']
+            corps = corp_basic.objects.filter(corpname__contains=searched)
+            return render(request, 'search.html', {'searched': searched, 'corps' : corps})
     else:
             return render(request, 'search.html', {})
 
