@@ -2,6 +2,10 @@
 ARG AIRFLOW_VERSION=2.6.2
 FROM apache/airflow:${AIRFLOW_VERSION}
 
+# Set environment variables
+ENV AIRFLOW_HOME=/opt/airflow
+
+USER root
 # Install Java and set JAVA_HOME
 RUN apt-get update && \
     apt-get install -y default-jre && \
@@ -11,10 +15,6 @@ RUN apt-get update && \
 # Set JAVA_HOME environment variable
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
 
-# Set environment variables
-ENV AIRFLOW_HOME=/opt/airflow
-
-USER root
 COPY config/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
