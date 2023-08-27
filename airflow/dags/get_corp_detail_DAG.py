@@ -19,8 +19,8 @@ default_args = {
     'owner': 'SeungEonKim',
     'retries': 1,
     'retry_delay': timedelta(minutes=2),
-    'on_failure_callback': slack_web_hook.on_failure_callback,
-    'on_success_callback': slack_web_hook.on_success_callback,
+    'on_failure_callback': slack_web_hook.on_failure_callback
+    # 'on_success_callback': slack_web_hook.on_success_callback,
 }
 
 with DAG(
