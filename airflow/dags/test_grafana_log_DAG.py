@@ -12,7 +12,7 @@ STATSD_PREFIX = conf.get("metrics", "statsd_prefix")
 client = StatsClient(host=STATSD_HOST, port=STATSD_PORT, prefix=STATSD_PREFIX)
 
 dag = DAG(
-    dag_id='HelloWorld',
+    dag_id='test_grafana_log_DAG',
     start_date=datetime(2022,5,5),
     catchup=False,
     tags=['example'],

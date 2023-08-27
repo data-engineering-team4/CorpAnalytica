@@ -24,7 +24,7 @@ default_args = {
 }
 
 with DAG(
-        dag_id='get_corp_detail_dag',
+        dag_id='get_corp_detail_DAG',
         start_date=datetime.datetime(2023, 8, 17),
         schedule_interval='0 15 * * *',
         max_active_runs=1,
