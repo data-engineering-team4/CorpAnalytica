@@ -74,23 +74,19 @@ with DAG(
                     corpname = item.find('corp_name').text # 기업명
                     stock_code = item.find('stock_code').text # 기업종목번호
                     
-                    try:
-                        stock_type = item.find('corp_cls').text # 주식종목코드
-                    except AttributeError:
-                        logging.info(f"{corpname}의 stock_type이 존재하지 않습니다.")
-                        continue
-                    
                     # 주식 종목 코드가 존재하고, 기업명에 특정 문자가 없는 기업들로만 데이터 수집
-                    if len(stock_code) > 1 and stock_type != 'E':
+                    if len(stock_code) > 1:
                         if ('기업인수' not in corpname and '스팩' not in corpname and '투자회사' not in corpname) or corpname in corp_exception_list:
 
                             try: 
                                 url = f"https://opendart.fss.or.kr/api/company.json?crtfc_key={dart_api_key}&corp_code={entno}"
-                                response = session.get(url)
-                                crno = response.json()["jurir_no"] # 법인등록번호
+                                response = session.get(url).json()
+                                crno = response["jurir_no"] # 법인등록번호
+                                stock_type = response["corp_cls"] # 주식 종목 타입
 
-                                csv_writer.writerow([entno, corpname, stock_code, crno, stock_str_map[stock_type]])
-                                logging.info(f"Add to CSV : {corpname}")
+                                if stock_type != 'E':
+                                    csv_writer.writerow([entno, corpname, stock_code, crno, stock_str_map[stock_type]])
+                                    logging.info(f"Add to CSV : {corpname}")
 
                             except requests.exceptions.RequestException as e:
                                 logging.info(e)
