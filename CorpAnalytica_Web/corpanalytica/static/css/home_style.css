@@ -11,6 +11,10 @@
     font-family: var(--font-family);
 }
 
+
+/*  main-section - 홈 로고  */
+
+
 .main-section{
     width: 70%;
     margin: 0 auto;
@@ -31,6 +35,10 @@
     height: 230px;
     padding-bottom: 15px;
 }
+
+
+/*  sub-section - 검색 + 워드클라우드 */
+
 
 .sub-section-background{
     width: 100%;
@@ -106,6 +114,10 @@
 .sub-section .wordcloud-wrap img {
     width: 45%;
 }
+
+
+/*  footer - 최하단바 */
+
 
 footer{
     position: fixed;
