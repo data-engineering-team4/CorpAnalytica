@@ -120,7 +120,7 @@ jobs:
         task-definition: ${{ steps.task-def-scheduler.outputs.task-definition }}
         service: ${{ env.ECS_SERVICE_SCHEDULER }}
         cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true
+        wait-for-service-stability: false
 
     - name: Deploy Amazon ECS task definition2
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -128,7 +128,7 @@ jobs:
         task-definition: ${{ steps.task-def-worker.outputs.task-definition }}
         service: ${{ env.ECS_SERVICE_WORKER }}
         cluster: ${{ env.ECS_CLUSTER }}
-        wait-for-service-stability: true
+        wait-for-service-stability: false
 
     - name: Deploy Amazon ECS task definition3
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
