@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/detail_style.css' %}">
+    <script src="https://kit.fontawesome.com/51db22a717.js" crossorigin="anonymous"></script>
+    <title>CorpAnalytica</title>
+</head>
+<body>
+
+
+    <section class="search-section">
+        <form class="search-bar" method="POST" action="{% url 'search' %}">
+
+                <input class="search-input" type="text" placeholder="기업이나 키워드를 검색해보세요!" name="searched" aria-label="Search">
+                <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
+
+        </form>
+
+        <hr class="divison-line">
+    </section>
+
+    <section class="corp-detail-section">
+
+        <div class="keyword">
+            <h1>키워드</h1>
+            <img class="keyword-img" src="{% static 'img/wordcloud1.png' %}">
+        </div>
+
+        <div class="keyword">
+            <h1>기사</h1>
+            <img class="keyword-img" src="{% static 'img/wordcloud1.png' %}">
+        </div>
+
+        <div class="keyword">
+            <h1>주식</h1>
+            <img class="keyword-img" src="{% static 'img/wordcloud1.png' %}">
+        </div>
+
+        <div class="keyword">
+            <h1>다른 기업</h1>
+            <div class="another-corp-list-box">
+                <div class="another-corp-box">삼성엔지니어링</div>
+                <div class="another-corp-box">삼성SDI</div>
+                <div class="another-corp-box">삼성전기</div>
+                <div class="another-corp-box">삼성생명</div>
+                <div class="another-corp-box">삼성카드</div>
+                <div class="another-corp-box">삼성SDS</div>
+
+            </div>
+        </div>
+        
+    </section>
+
+
+</body>
+</html>

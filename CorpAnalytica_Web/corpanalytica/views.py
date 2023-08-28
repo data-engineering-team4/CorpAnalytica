@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 
 def home_view(request):
@@ -6,11 +6,11 @@ def home_view(request):
 
 def search_view(request):
     if request.method == 'POST':
-            searched = request.POST['searched']
-            corps = corp_basic.objects.filter(corpname__contains=searched)
-            return render(request, 'search.html', {'searched': searched, 'corps' : corps})
+        searched = request.POST['searched']
+        corps = corp_basic.objects.filter(corpname__contains=searched)
+        return render(request, 'search.html', {'searched': searched, 'corps' : corps})
     else:
-            return render(request, 'search.html', {})
+        return render(request, 'search.html', {})
 
-def corp_detail_view(request):
-    return render(request,'corp_detail.html')
+def detail_view(request,entno):
+    return render(request, 'detail.html', {'entno' : entno})

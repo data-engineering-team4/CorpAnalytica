@@ -32,11 +32,11 @@
 
                         <!-- 검색결과 나열하기 -->
                         {% for corp in corps %}
-                                <div class="searched_item">
+                                <a class="searched_item" href="/detail/{{ corp.entno }}">
                                         <h2>{{ corp.corpname }}</h2>
                                         <p>주식 종목 코드 : {{ corp.code }}</p>
                                         <p class="tags">법인 등록 코드 : {{ corp.crno }}</p>
-                                </div>
+                                </a>
                         {% endfor %}
 
                 </div>
