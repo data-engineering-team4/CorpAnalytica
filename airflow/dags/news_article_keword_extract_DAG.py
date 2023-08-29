@@ -62,7 +62,7 @@ with DAG(
         df = pd.read_csv(news_article_csv_filename)
         rows = df.values.tolist()
 
-        news_keyword_df = pd.DataFrame(columns = ['corpname','link','keywords','summary_sentence1','summary_sentence2','summary_sentence3'])
+        news_keyword_df = pd.DataFrame(columns = ['id','corpname','link','keywords','summary_sentence1','summary_sentence2','summary_sentence3'])
         for row in rows:
             corpname = row[0]
             print(corpname)
@@ -78,10 +78,12 @@ with DAG(
             sorted_word_rank_idx = sorted(word_rank_idx, key=lambda k: word_rank_idx[k], reverse=True)
             sum_sentence = summarize(sorted_sent_rank_idx, sentences)
             sum_keyword = keywords(sorted_word_rank_idx, idx2word)
-            new_row = [corpname, link, sum_keyword, sum_sentence[0], sum_sentence[1], sum_sentence[2]]
+            id = corpname + ' ' + link
+
+            new_row = [id,corpname, link, sum_keyword, sum_sentence[0], sum_sentence[1], sum_sentence[2]]
             news_keyword_list.append(new_row)
 
-        news_keyword_df = pd.DataFrame(news_keyword_list, columns=['corpname', 'link', 'keywords', 'summary_sentence1', 'summary_sentence2', 'summary_sentence3'])
+        news_keyword_df = pd.DataFrame(news_keyword_list, columns=['id','corpname', 'link', 'keywords', 'summary_sentence1', 'summary_sentence2', 'summary_sentence3'])
         news_keyword_df.to_csv(news_keyword_csv_filename, index=False, encoding='utf-8')
         logging.info(f"{len(news_keyword_df)} : {corpname}의 뉴스 {link} 저장")
             
@@ -227,7 +229,7 @@ with DAG(
         aws_conn_id = "S3_conn",    
 
         method = "UPSERT",
-        upsert_keys = ["link"],
+        upsert_keys = ["id"],
         dag = dag
     )
 

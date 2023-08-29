@@ -73,6 +73,7 @@ with DAG(
                 formatted_pubdate = pubdate_parsed.strftime("%Y-%m-%d %H:%M:%S")
 
                 news_data_dic = {
+                    'id' : corpname + ' ' + news['link'],
                     'code' : stock_code,
                     'corpname' : corpname,
                     'title' : news['title'],
@@ -116,7 +117,7 @@ with DAG(
 
         news_data_list = make_corps_news_list()
         # csv 파일 생성
-        columns = ['code','corpname','title','link','description', 'pubDate']
+        columns = ['id','code','corpname','title','link','description', 'pubDate']
         df = pd.DataFrame.from_records(news_data_list, columns=columns)  # 데이터프레임 생성
         df.to_csv(csv_filename, index=False, encoding='utf-8') # CSV 파일로 저장
         logging.info("csv 파일 저장 완료")
