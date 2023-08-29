@@ -7,9 +7,9 @@ model_list = [
     corp_basic,
     corp_detail,
     corp_keyword,
-    # naver_news,
-    # news_article,
-    # news_keyword,
+    naver_news,
+    news_article,
+    news_keyword,
     test_table
 ]
 
