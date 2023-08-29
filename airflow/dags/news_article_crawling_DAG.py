@@ -79,6 +79,7 @@ with DAG(
                             continue
 
                         news_dic = {
+                            'id' : corpname + ' ' + link,
                             'corpname': corpname,
                             'link': link,
                             'article': article,
@@ -127,7 +128,7 @@ with DAG(
     #             total_news_article_list.append(news_dic)
 
     #             logging.info(f"{len(total_news_article_list)} : {corpname}의 뉴스 {line[2]} 저장")
-            
+
     #         df = pd.DataFrame(total_news_article_list)
     #         table = pa.Table.from_pandas(df)
     #         pq.write_table(table, news_article_parquet_filename)
@@ -318,7 +319,7 @@ with DAG(
         aws_conn_id = "S3_conn",    
 
         method = "UPSERT",
-        upsert_keys = ["link"],
+        upsert_keys = ["id"],
         dag = dag
     )
 

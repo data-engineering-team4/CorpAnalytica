@@ -82,6 +82,7 @@ with DAG(
 
                     # 'code' 부분 수정해야함
                     news_data_dic = {
+                        'id' : corpname + ' ' + news['link'],
                         'code' : stock_code,
                         'corpname' : corpname,
                         'title' : news['title'],
@@ -92,8 +93,6 @@ with DAG(
                     
                     corp_news_data_list.append(news_data_dic)
                     client.incr(metric_name)
-
-                # 만약 백 번째 데이터의 pubDate가 execution_date보다 크다면(미래라면) params의 start에 + 100하도록 하고 다시 요청, start가 901이라면 멈추기.  < 이 부분이 앞으로 가야할 것.
 
             return corp_news_data_list
         
@@ -140,7 +139,7 @@ with DAG(
         csv_filename = "data/naver_news/naver_news_" + str(logical_date_kst.date()) + ".csv"
         kwargs['ti'].xcom_push(key='csv_filename', value=csv_filename)
 
-        columns = ['code','corpname','title','link','description', 'pubDate']
+        columns = ['id','code','corpname','title','link','description', 'pubDate']
         df = pd.DataFrame.from_records(news_data_list, columns=columns)  # 데이터프레임 생성
 
         df.to_csv(csv_filename, index=False, encoding='utf-8') # CSV 파일로 저장
@@ -190,7 +189,7 @@ with DAG(
         aws_conn_id = "S3_conn",    
 
         method = "UPSERT",
-        upsert_keys = ["link"],
+        upsert_keys = ["id"],
         dag = dag
     )
 
