@@ -82,11 +82,11 @@ x-airflow-common:
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
     # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pyarrow scikit-learn apache-airflow-providers-common-sql[pandas] konlpy}
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- Finance-DataReader konlpy typing pandas statsd scikit-learn}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- Finance-DataReader konlpy typing pandas statsd scikit-learn wordcloud}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/logs:/opt/airflow/logs
-    - ${AIRFLOW_PROJ_DIR:-../../airflow}/config:/opt/airflow/configs
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/configs:/opt/airflow/configs
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/dbt:/dbt
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/data:/opt/airflow/data
@@ -324,22 +324,22 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-  # statsd-exporter:
-  #   image: prom/statsd-exporter:v0.21.0
-  #   volumes:
-  #     - ./configs/statsd.yaml:/home/statsd-mapping-configs.yaml
-  #   entrypoint: ["/bin/sh", "-c", "--"]
-  #   command: ["statsd_exporter --log.level debug --statsd.mapping-config=/home/statsd-mapping-configs.yaml"]
-  #   ports:
-  #     - 9102:9102   # scrape port
-  #     - 9125:9125   # ingest port
-  #   restart: always
+  statsd-exporter:
+    image: prom/statsd-exporter:v0.21.0
+    volumes:
+      - ../../airflow/configs/statsd.yaml:/home/statsd-mapping-configs.yaml
+    entrypoint: ["/bin/sh", "-c", "--"]
+    command: ["statsd_exporter --log.level debug --statsd.mapping-config=/home/statsd-mapping-configs.yaml"]
+    ports:
+      - 9102:9102   # scrape port
+      - 9125:9125   # ingest port
+    restart: always
 
-  # node-exporter:
-  #   image: prom/node-exporter
-  #   ports:
-  #     - 9200:9100
-  #   # restarts: always
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9200:9100
+    # restarts: always
 
 
   # prometheus:
