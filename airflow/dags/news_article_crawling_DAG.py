@@ -65,12 +65,14 @@ with DAG(
                 total_news_article_list = []
 
                 # submit을 사용하여 크롤링 작업을 스레드 풀에 추가
-                future_to_link = {executor.submit(news_crawling_from_link, line[3]): line for line in csv_reader}
+                future_to_link = {executor.submit(news_crawling_from_link, line[4]): line for line in csv_reader}
 
+                count = 0
                 for future in concurrent.futures.as_completed(future_to_link):
+                    count += 1
                     line = future_to_link[future]
-                    corpname = line[1]
-                    link = line[3]
+                    corpname = line[2]
+                    link = line[4]
 
                     try:
                         article = future.result()
@@ -86,7 +88,7 @@ with DAG(
                         }
                         total_news_article_list.append(news_dic)
 
-                        logging.info(f"{len(total_news_article_list)} : {corpname}의 뉴스 {line[2]} 저장")
+                        logging.info(f"{len(total_news_article_list)} / {count} : {corpname}의 뉴스 {line[3]} 저장")
                     except Exception as e:
                         logging.error(f"에러 발생: {e}")
 
@@ -111,8 +113,8 @@ with DAG(
 
     #         total_news_article_list = []
     #         for line in csv_reader:
-    #             corpname = line[1]
-    #             link = line[3]
+    #             corpname = line[2]
+    #             link = line[4]
     #             article = news_crawling_from_link(link)
 
     #             # 뉴스 기사 데이터를 가져오지 못했으면 다음으로 스킵
@@ -127,7 +129,7 @@ with DAG(
     #             }
     #             total_news_article_list.append(news_dic)
 
-    #             logging.info(f"{len(total_news_article_list)} : {corpname}의 뉴스 {line[2]} 저장")
+    #             logging.info(f"{len(total_news_article_list)} : {corpname}의 뉴스 {line[3]} 저장")
 
     #         df = pd.DataFrame(total_news_article_list)
     #         table = pa.Table.from_pandas(df)
