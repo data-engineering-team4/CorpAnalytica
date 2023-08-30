@@ -1,6 +1,12 @@
+@font-face {
+    font-family: 'BMDOHYEON';
+    src: url('../fonts/BMDOHYEON.ttf') format('truetype');
+}
+
 :root{
-    --font-family: 'Apple SD Gothic Neo',arial,sans-serif;
-}  
+    /* --font-family: 'Apple SD Gothic Neo',arial,sans-serif; */
+    --font-family: 'BMDOHYEON'
+} 
 *{
     padding: 0;
     margin: 0;
@@ -44,7 +50,7 @@ body {
     padding: 12px;
     border-radius: 12px;
     text-align: center;
-    font-weight: bold;
+    /* font-weight: bold; */
     font-size: 30px;
     border: 3px solid black;
     outline: none;

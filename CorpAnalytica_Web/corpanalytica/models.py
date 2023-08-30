@@ -52,69 +52,50 @@ class corp_keyword(models.Model):
     def __str__(self):
         return self.corpname
     
-# class naver_news(models.Model):
-#     code = models.CharField(max_length=6, null=False)
-#     corpname = models.CharField(max_length=100, null=False)
-#     title = models.CharField(max_length=500, null=False)
-#     link = models.CharField(max_length=500, null=False)
-#     description = models.CharField(max_length=1000)
-#     date = models.DateField
+class naver_news(models.Model):
+    id = models.CharField(max_length=500,primary_key=True)
+    code = models.CharField(max_length=6, null=False)
+    corpname = models.CharField(max_length=100, null=False)
+    title = models.CharField(max_length=500, null=False)
+    link = models.CharField(max_length=500, null=False)
+    description = models.CharField(max_length=1000)
+    date = models.DateField
 
-#     class Meta:
-#         managed = False
-#         db_table = 'naver_news'
-#         unique_together = (('corpname', 'link'))
+    class Meta:
+        managed = False
+        db_table = 'naver_news'
 
-#     def __str__(self):
-#         return self.corpname + " / " + self.link
+    def __str__(self):
+        return self.id
     
-# class news_article(models.Model):
-#     corpname = models.CharField(max_length=256, null=False)
-#     link = models.CharField(max_length=256, null=False)
-#     article = models.TextField
+class news_article(models.Model):
+    id = models.CharField(max_length=500,primary_key=True)
+    corpname = models.CharField(max_length=256, null=False)
+    link = models.CharField(max_length=256, null=False)
+    article = models.TextField
 
-#     class Meta:
-#         managed = False
-#         db_table = 'news_article'
-#         unique_together = (('corpname', 'link'))
+    class Meta:
+        managed = False
+        db_table = 'news_article'
 
-#     def __str__(self):
-#         return self.corpname + " / " + self.link
+    def __str__(self):
+        return self.id
 
-# class news_keyword(models.Model):
-#     corpname = models.CharField(max_length=50, null=False)
-#     link = models.CharField(max_length=200, null=False)
-#     keyword = models.CharField(max_length=300, null=False)
-#     summary_sentence1 = models.TextField
-#     summary_sentence2 = models.TextField
-#     summary_sentence3 = models.TextField
+class news_keyword(models.Model):
+    id = models.CharField(max_length=500,primary_key=True)
+    corpname = models.CharField(max_length=50, null=False)
+    link = models.CharField(max_length=200, null=False)
+    keyword = models.CharField(max_length=300, null=False)
+    summary_sentence1 = models.TextField
+    summary_sentence2 = models.TextField
+    summary_sentence3 = models.TextField
 
-#     class Meta:
-#         managed = False
-#         db_table = 'news_keyword'
-#         unique_together = (('corpname', 'link'))
+    class Meta:
+        managed = False
+        db_table = 'news_keyword'
 
-#     def __str__(self):
-#         return self.corpname + " / " + self.link
-
-# Finance 데이터 생기면 주석풀기
-# class finance(models.Model):
-#     corpname = models.CharField(max_length=50, null=False, primary_key=True)
-#     name = models.CharField(max_length=200, null=False)
-#     market = models.CharField(max_length=300, null=False)
-#     datetime = models.DateTimeField(null=False)
-#     open = models.IntegerField(null=False)
-#     high = models.IntegerField(null=False)
-#     low = models.IntegerField(null=False)
-#     close = models.IntegerField(null=False)
-#     volume = models.IntegerField(null=False)
-
-#     class Meta:
-#         managed = False
-#         db_table = 'finance'
-
-#     def __str__(self):
-#         return self.corpname
+    def __str__(self):
+        return self.id
 
 class test_table(models.Model):
     corpname = models.CharField(max_length=50, null=False, primary_key=True)
