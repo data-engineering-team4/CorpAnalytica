@@ -1,4 +1,4 @@
-apache-airflow[docker,amazon]
+#apache-airflow[docker,amazon]
 typing
 s3fs
 pandas
