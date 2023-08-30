@@ -1,2 +1,4 @@
 Django==4.0
 django-environ
+django_redshift_backend
+psycopg2-binary

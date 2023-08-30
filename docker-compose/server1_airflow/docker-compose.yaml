@@ -51,7 +51,7 @@ x-airflow-common:
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.3}
-  # build: .
+  build: ../../airflow
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
@@ -73,6 +73,7 @@ x-airflow-common:
     AIRFLOW__METRICS__STATSD_PORT: 9125
     AIRFLOW__METRICS__STATSD_PREFIX: 'airflow'
 
+
     # yamllint disable rule:line-length
     # Use simple http server on scheduler for health checks
     # See https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/check-health.html#scheduler-health-check-server
@@ -80,16 +81,27 @@ x-airflow-common:
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pyarrow scikit-learn apache-airflow-providers-common-sql[pandas] konlpy}
+    # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pyarrow scikit-learn apache-airflow-providers-common-sql[pandas] konlpy}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- Finance-DataReader konlpy typing pandas statsd scikit-learn wordcloud}
   volumes:
-    - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
-    - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
-    - ${AIRFLOW_PROJ_DIR:-.}/configs:/opt/airflow/configs
-    - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
-    - ${AIRFLOW_PROJ_DIR:-.}/dbt:/dbt
-    - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/airflow/data
-    - ${AIRFLOW_PROJ_DIR:-.}/connections.json:/opt/airflow/connections.json
-    - ${AIRFLOW_PROJ_DIR:-.}/variables.json:/opt/airflow/variables.json
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/dags:/opt/airflow/dags
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/logs:/opt/airflow/logs
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/configs:/opt/airflow/configs
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/plugins:/opt/airflow/plugins
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/dbt:/dbt
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/data:/opt/airflow/data
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/connections.json:/opt/airflow/connections.json
+    - ${AIRFLOW_PROJ_DIR:-../../airflow}/variables.json:/opt/airflow/variables.json
+
+    # - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
+    # - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
+    # - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/configs
+    # - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    # - ${AIRFLOW_PROJ_DIR:-.}/dbt:/dbt
+    # - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/airflow/data
+    # - ${AIRFLOW_PROJ_DIR:-.}/connections.json:/opt/airflow/connections.json
+    # - ${AIRFLOW_PROJ_DIR:-.}/variables.json:/opt/airflow/variables.json
+    
   user: "${AIRFLOW_UID:-1000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -130,9 +142,9 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
-    build:
-      context: ./airflow  # Dockerfile이 있는 경로
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./airflow  # Dockerfile이 있는 경로
+    #   dockerfile: Dockerfile
     ports:
       - "8080:8080"
     healthcheck:
@@ -275,7 +287,7 @@ services:
       _PIP_ADDITIONAL_REQUIREMENTS: ''
     user: "0:0"
     volumes:
-      - ${AIRFLOW_PROJ_DIR:-.}:/sources
+      - ${AIRFLOW_PROJ_DIR:-../../airflow}:/sources
 
   airflow-cli:
     <<: *airflow-common
@@ -315,7 +327,7 @@ services:
   statsd-exporter:
     image: prom/statsd-exporter:v0.21.0
     volumes:
-      - ./configs/statsd.yaml:/home/statsd-mapping-configs.yaml
+      - ../../airflow/configs/statsd.yaml:/home/statsd-mapping-configs.yaml
     entrypoint: ["/bin/sh", "-c", "--"]
     command: ["statsd_exporter --log.level debug --statsd.mapping-config=/home/statsd-mapping-configs.yaml"]
     ports:
@@ -326,39 +338,39 @@ services:
   node-exporter:
     image: prom/node-exporter
     ports:
-      - 9100:9100
+      - 9200:9100
     # restarts: always
 
 
-  prometheus:
-    image: prom/prometheus:v2.26.0
-    volumes:
-      - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yaml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yaml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    ports:
-      - 9092:9090
-    restart: always
+  # prometheus:
+  #   image: prom/prometheus:v2.26.0
+  #   volumes:
+  #     - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yaml
+  #     - prometheus_data:/prometheus
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yaml'
+  #     - '--storage.tsdb.path=/prometheus'
+  #     - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+  #     - '--web.console.templates=/usr/share/prometheus/consoles'
+  #   ports:
+  #     - 9092:9090
+  #   restart: always
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    volumes:
-      - grafana_data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=grafana
-      - GF_USERS_ALLOW_SIGN_UP=false
-    restart: always
-    ports:
-      - 3000:3000
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   environment:
+  #     - GF_SECURITY_ADMIN_USER=admin
+  #     - GF_SECURITY_ADMIN_PASSWORD=grafana
+  #     - GF_USERS_ALLOW_SIGN_UP=false
+  #   restart: always
+  #   ports:
+  #     - 3000:3000
 
 
 volumes:
   postgres-db-volume:
-  prometheus_data:
-  grafana_data:
+  # prometheus_data:
+  # grafana_data:
