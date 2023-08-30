@@ -82,7 +82,7 @@ x-airflow-common:
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
     # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pyarrow scikit-learn apache-airflow-providers-common-sql[pandas] konlpy}
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- Finance-DataReader konlpy typing pandas statsd scikit-learn wordcloud}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- konlpy typing pandas statsd scikit-learn wordcloud kss}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/logs:/opt/airflow/logs
@@ -92,15 +92,6 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/data:/opt/airflow/data
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/connections.json:/opt/airflow/connections.json
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/variables.json:/opt/airflow/variables.json
-
-    # - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
-    # - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
-    # - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/configs
-    # - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
-    # - ${AIRFLOW_PROJ_DIR:-.}/dbt:/dbt
-    # - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/airflow/data
-    # - ${AIRFLOW_PROJ_DIR:-.}/connections.json:/opt/airflow/connections.json
-    # - ${AIRFLOW_PROJ_DIR:-.}/variables.json:/opt/airflow/variables.json
     
   user: "${AIRFLOW_UID:-1000}:0"
   depends_on:
@@ -341,36 +332,5 @@ services:
       - 9200:9100
     # restarts: always
 
-
-  # prometheus:
-  #   image: prom/prometheus:v2.26.0
-  #   volumes:
-  #     - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yaml
-  #     - prometheus_data:/prometheus
-  #   command:
-  #     - '--config.file=/etc/prometheus/prometheus.yaml'
-  #     - '--storage.tsdb.path=/prometheus'
-  #     - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-  #     - '--web.console.templates=/usr/share/prometheus/consoles'
-  #   ports:
-  #     - 9092:9090
-  #   restart: always
-
-  # grafana:
-  #   image: grafana/grafana
-  #   container_name: grafana
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-  #   environment:
-  #     - GF_SECURITY_ADMIN_USER=admin
-  #     - GF_SECURITY_ADMIN_PASSWORD=grafana
-  #     - GF_USERS_ALLOW_SIGN_UP=false
-  #   restart: always
-  #   ports:
-  #     - 3000:3000
-
-
 volumes:
   postgres-db-volume:
-  # prometheus_data:
-  # grafana_data:
