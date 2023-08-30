@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,8 +16,13 @@
 
     <section class="search-section">
         <form class="search-bar" method="POST" action="{% url 'search' %}">
-
+            {% csrf_token %}
+            {% if corp %}
+                <input class="search-input" type="text"  value= "{{ corp.corpname }}" name="searched" aria-label="Search">
+            {% else %}
                 <input class="search-input" type="text" placeholder="기업이나 키워드를 검색해보세요!" name="searched" aria-label="Search">
+            {% endif %}
+
                 <button class="search-button" type="submit"><i class="fas fa-search"></i></button>
 
         </form>
@@ -24,33 +32,52 @@
 
     <section class="corp-detail-section">
 
-        <div class="keyword">
-            <h1>키워드</h1>
-            <img class="keyword-img" src="{% static 'img/wordcloud1.png' %}">
-        </div>
+        <h1 class="detail-title">키워드</h1>
 
-        <div class="keyword">
-            <h1>기사</h1>
-            <img class="keyword-img" src="{% static 'img/wordcloud1.png' %}">
-        </div>
-
-        <div class="keyword">
-            <h1>주식</h1>
-            <img class="keyword-img" src="{% static 'img/wordcloud1.png' %}">
-        </div>
-
-        <div class="keyword">
-            <h1>다른 기업</h1>
-            <div class="another-corp-list-box">
-                <div class="another-corp-box">삼성엔지니어링</div>
-                <div class="another-corp-box">삼성SDI</div>
-                <div class="another-corp-box">삼성전기</div>
-                <div class="another-corp-box">삼성생명</div>
-                <div class="another-corp-box">삼성카드</div>
-                <div class="another-corp-box">삼성SDS</div>
-
+            <div class="detail-item">
+                <ul class="keyword-list">
+                    {% for keyword in corp_keyword %}
+                        <p>{{ keyword }}</p>
+                    {% endfor %}
+                </ul>
             </div>
-        </div>
+
+        <h1 class="detail-title">기사</h1>
+            <div class="detail-item">
+                <ul class="news_list">
+                    {% for naver_news_one in naver_news %}
+                        <div class="article-box">
+                            <a href='{{ naver_news_one.link }}'>
+                            <h3>{{ naver_news_one.title }}</h3>
+                            </a>
+                            <p class="article-body">{{naver_news_one.description}}</p>
+                            <p class="article-date">{{naver_news_one.date}}</p>
+                        </div>
+                        <hr class="news-divison-line">
+                    {% endfor %}
+                </ul>
+            </div>
+
+        <h1 class="detail-title">주식</h1>
+
+            <div class="detail-item">
+
+                <img class="finance-chart" src="{% static 'img/wordcloud1.png' %}">
+            </div>
+
+        <h1 class="detail-title">다른 기업</h1>
+
+            <div class="detail-item">
+                <div class="another-corp-list-box">
+                    <div class="another-corp-box">삼성엔지니어링</div>
+                    <div class="another-corp-box">삼성SDI</div>
+                    <div class="another-corp-box">삼성전기</div>
+                    <div class="another-corp-box">삼성생명</div>
+                    <div class="another-corp-box">삼성카드</div>
+                    <div class="another-corp-box">삼성SDS</div>
+
+                </div>
+            </div>
         
     </section>
 

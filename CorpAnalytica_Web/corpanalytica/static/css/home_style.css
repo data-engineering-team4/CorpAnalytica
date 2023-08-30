@@ -1,9 +1,15 @@
+@font-face {
+    font-family: 'BMDOHYEON';
+    src: url('../fonts/BMDOHYEON.ttf') format('truetype');
+}
+
 :root{
     --gray-color :#717271;
     --light-gray-color: #cfd0d3;
     --footer-back-color: #f1f2f1;
     --footer-border-color: #e3e4e3;
-    --font-family: 'Apple SD Gothic Neo',arial,sans-serif;
+    /* --font-family: 'Apple SD Gothic Neo',arial,sans-serif; */
+    --font-family: 'BMDOHYEON';
 }  
 *{
     padding: 0;
@@ -72,9 +78,10 @@
     border-radius: 12px;
     text-align: center;
     font-size: 30px;
-    font-weight: bold;
+    /* font-weight: bold; */
     border: none;
     outline: none;
+    font-family: SDSBasic;
 }
 
 .search-bar .search-button {
