@@ -1,0 +1,7 @@
+#apache-airflow[docker,amazon]
+typing
+s3fs
+pandas
+konlpy
+statsd
+scikit-learn
