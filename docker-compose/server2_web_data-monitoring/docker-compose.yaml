@@ -16,7 +16,7 @@ services:
     image:
       nginx:latest
     ports:
-      - "80:80"
+      - "70:80"
     volumes:
       - ../../CorpAnalytica_Web:/app
       - ../../CorpAnalytica_Web/nginx:/etc/nginx/conf.d
