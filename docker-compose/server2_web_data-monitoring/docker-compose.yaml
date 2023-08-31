@@ -18,7 +18,7 @@ services:
     ports:
       - "70:80"
     volumes:
-      - ../../CorpAnalytica_Web:/app
+      # - ../../CorpAnalytica_Web:/app
       # - ../../CorpAnalytica_Web/nginx:/etc/nginx/conf.d
       - ../../CorpAnalytica_Web/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
