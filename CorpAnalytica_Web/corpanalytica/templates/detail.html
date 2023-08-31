@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -51,7 +48,7 @@
                             <h3>{{ naver_news_one.title }}</h3>
                             </a>
                             <p class="article-body">{{naver_news_one.description}}</p>
-                            <p class="article-date">{{naver_news_one.date}}</p>
+                            <p class="article-date">{{naver_news_one.pubdate}}</p>
                         </div>
                         <hr class="news-divison-line">
                     {% endfor %}

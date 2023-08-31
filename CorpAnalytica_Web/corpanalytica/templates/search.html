@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load custom_tags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +10,8 @@
     <title>CorpAnalytica</title>
 </head>
 <body>
+
+        <!-- render(request, 'search.html', {'searched': searched, 'stock_corps_list' : stock_corps_list, 'non_stock_corps_list' : non_stock_corps_list, 'searched_news_list' : searched_news_list}) -->
 
         <section class="search-section">
                 <form class="search-bar" method="POST" action="{% url 'search' %}">
@@ -30,14 +33,55 @@
 
                 <div class="search-container">
 
-                        <!-- 검색결과 나열하기 -->
-                        {% for corp in corps %}
-                                <a class="searched_item" href="{% url 'detail' entno=corp.entno %}">
-                                        <h2>{{ corp.corpname }}</h2>
-                                        <p>주식 종목 코드 : {{ corp.code }}</p>
-                                        <p class="tags">법인 등록 코드 : {{ corp.crno }}</p>
-                                </a>
+                        <!-- 상장기업결과 나열하기 -->
+                        {% for corp in stock_corps_list %}
+                        <a class="searched_item" href="{% url 'detail' entno=corp.entno %}">
+                                <h2>{{ corp.corpname }}</h2>
+                                <p>주식 종목 코드 : {{ corp.code }}</p>
+                                {% if corp.address %}
+                                <p>주소 : {{ corp.address }}</p>
+                                {% endif %}
+                                
+
+                                <!-- 해당 기업의 키워드 -->
+                                {% if corp.keyword %}
+                                <div class="keyword-div">
+                                        <p>키워드 : </p>
+                                        <ul class="keyword-list">
+                                        {% for keyword in stock_corps_keywords|get_value_from_dict:corp.entno %}
+                                                <li>{{ keyword }} </li>
+                                        {% endfor %}
+                                        </ul>
+                                </div>
+                                {% endif %}
+
+                                <p class="tags">법인 등록 코드 : {{ corp.crno }}</p>
+                        </a>
                         {% endfor %}
+
+                        <!-- 비상장기업결과 나열하기 -->
+                        <!-- 더보기로 구현? -->
+                        {% for corp in non_stock_corps_list|slice:":5" %}
+                        <a class="searched_item" href="{% url 'detail' entno=corp.entno %}">
+                                <h2>{{ corp.corpname }}</h2>
+                                {% if corp.address %}
+                                <p>주소 : {{ corp.address }}</p>
+                                {% endif %}
+                                <p class="tags">법인 등록 코드 : {{ corp.crno }}</p>
+                        </a>
+                        {% endfor %}
+
+                        <!-- 뉴스결과 나열하기 -->
+                        <ul class="news_list">
+                                {% for news in searched_news_list %}
+                                        <div class="article-box">
+                                                <a href='{{ news.link }}'><h3>{{ news.title |safe }}</h3></a>
+                                                <p class="article-body">{{news.description |safe}}</p>
+                                                <p class="article-date">{{news.pubdate}}</p>
+                                        </div>
+                                        <hr class="news-divison-line">
+                                {% endfor %}
+                        </ul>
 
                 </div>
         </section>

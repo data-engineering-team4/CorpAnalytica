@@ -81,14 +81,7 @@ body {
 }
 
 
-/* .search-result-section - 검색 결과 */
-
-
-.search-result-section{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-}
+/* .search-result-section - 기업 검색 결과 */
 
 .search-container{
     display: flex;
@@ -99,6 +92,36 @@ body {
     border: 3px solid black;
     border-radius: 15px;
     padding: 35px 0px 35px 0px
+}
+
+.search-result-section{
+
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+}
+
+.corp-detail-section .keyword-div{
+
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 85%;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    display: flex;
+    margin: 0 auto;
+}
+
+.corp-detail-section .keyword-div .keyword-list {
+    display: flex;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    list-style: none;
+    padding: 0;
 }
 
 .search-container .searched_item{
@@ -132,4 +155,37 @@ body {
 
 .search-container .searched_item:hover{
     background-color: lightgray;
+}
+
+/*  뉴스 리스트  */
+
+.news-list{
+    display: flex;
+    margin-top: 20px;
+    flex-direction: column;
+    gap:3px
+}
+
+.article-box .article-body{
+    white-space: pre-line;
+    max-height: 3em; 
+    overflow: hidden; 
+    margin: 0 auto; 
+}
+
+.article-box .article-date{
+    color: gray;
+    font-size: 13px;
+    margin:0
+}
+
+.news-divison-line{
+    border-top: 3px solid rgba(143, 150, 157, 0.92);
+    border-radius: 3px;
+    width: 95%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    display: flex;
 }

@@ -10,7 +10,7 @@ model_list = [
     naver_news,
     news_article,
     news_keyword,
-    test_table
+    corp_total_info,
 ]
 
 admin.site.register(model_list)
