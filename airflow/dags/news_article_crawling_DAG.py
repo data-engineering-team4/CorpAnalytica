@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python import PythonOperator
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.models import XCom
 
 from concurrent.futures import ThreadPoolExecutor
@@ -96,45 +97,6 @@ with DAG(
                 table = pa.Table.from_pandas(df)
                 pq.write_table(table, news_article_parquet_filename)
 
-
-    # # 네이버 뉴스 csv 파일로부터 링크를 읽어서 뉴스 데이터 크롤링
-    # def get_news_article_crawling_data_from_naver_news(**kwargs):
-
-    #     logical_date_kst = kwargs['logical_date'] + timedelta(hours=9)
-    #     logging.info(f"-- logical_date : {logical_date_kst} --\n-- 해당 날짜에서 뉴스 데이터를 가져옵니다. --")
-
-    #     naver_news_csv_filename = "data/naver_news/naver_news_" + str(logical_date_kst.date()) + ".csv"
-    #     news_article_parquet_filename = "data/news_article/news_article_" + str(logical_date_kst.date()) + ".parquet"
-    #     kwargs['ti'].xcom_push(key='news_article_parquet_filename', value=news_article_parquet_filename)
-
-    #     with open(naver_news_csv_filename, 'r', encoding='utf-8') as f:
-    #         csv_reader = csv.reader(f)
-    #         next(csv_reader) # 헤더 무시
-
-    #         total_news_article_list = []
-    #         for line in csv_reader:
-    #             corpname = line[2]
-    #             link = line[4]
-    #             article = news_crawling_from_link(link)
-
-    #             # 뉴스 기사 데이터를 가져오지 못했으면 다음으로 스킵
-    #             if len(article) < 1:
-    #                 logging.info(f"{corpname}의 뉴스 데이터를 가져올 수 없습니다. 링크 : {link}")
-    #                 continue
-                
-    #             news_dic = {
-    #                 'corpname' : corpname,
-    #                 'link' : link,
-    #                 'article' : article,
-    #             }
-    #             total_news_article_list.append(news_dic)
-
-    #             logging.info(f"{len(total_news_article_list)} : {corpname}의 뉴스 {line[3]} 저장")
-
-    #         df = pd.DataFrame(total_news_article_list)
-    #         table = pa.Table.from_pandas(df)
-    #         pq.write_table(table, news_article_parquet_filename)
-    #         # df.to_csv(news_article_csv_filename, index=False, encoding='utf-8')
 
     # s3에 parquet 파일 업로드
     def upload_parquet_to_s3(**kwargs):
@@ -325,4 +287,10 @@ with DAG(
         dag = dag
     )
 
-    get_news_article_crawling_parquet_task >> upload_news_article_parquet_to_s3_task >> news_article_crawling_s3_to_redshift_task
+    trigger_news_article_keword_extract_task = TriggerDagRunOperator(
+        task_id='trigger_news_article_keword_extract_task',
+        trigger_dag_id='news_article_keword_extract_DAG',
+        execution_date="{{ execution_date }}"
+    )
+
+    get_news_article_crawling_parquet_task >> upload_news_article_parquet_to_s3_task >> news_article_crawling_s3_to_redshift_task >> trigger_news_article_keword_extract_task
