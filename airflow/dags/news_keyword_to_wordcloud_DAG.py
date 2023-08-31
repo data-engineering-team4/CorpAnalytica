@@ -20,12 +20,13 @@ default_args = {
     'retries': 1,
 }
 
-def query_redshift_to_dataframe(**kwargs):
+def query_redshift_to_dataframe():
     redshift_conn_id = 'Redshift_conn'  # Airflow Connection ID for Redshift
-    logical_date_kst = kwargs['logical_date'] + timedelta(hours=9)
-    
-    #sql_query = f"select ne.keyword from raw_data.news_keyword ne, raw_data.naver_news na where ne.corpname = na.corpname and na.pubdate like '{2023-07-08}%';"
-    sql_query1 = f"""select REPLACE(REPLACE(REPLACE(ne.keyword, '[', ''), ']', ''), '''', '') AS cleaned_string 
+    logical_date_utc = datetime.now()
+    logical_date_kst = (logical_date_utc + timedelta(hours=9) - timedelta(days=1)).strftime("%Y-%m-%d")
+    logging.info(logical_date_kst)
+    #sql_query = f"select ne.keyword from raw_data.news_keyword ne, raw_data.naver_news na where ne.corpname = na.corpname and na.pubdate like '{str(logical_date_kst)}%';"
+    sql_query1 = f"""select REPLACE(REPLACE(REPLACE(ne.keyword, '[', ''), ']', ''), '''', '') AS cleaned_string
                 from raw_data.news_keyword ne, raw_data.naver_news na where ne.id = na.id and na.pubdate like '{str(logical_date_kst)}%';"""
     sql_query2 = f"""select corpname from raw_data.naver_news where pubdate like '{str(logical_date_kst)}%';"""
 
@@ -57,7 +58,7 @@ def create_wordcloud(**kwargs):
     corps_count = dict(sorted(Counter(corps_list).items(), key=lambda x: x[1], reverse=True)[:15])
     logging.info("Wordcount Success")
 
-    font_path = 'data/BMJUA.ttf'  # 다운로드한 한글 폰트 파일 경로
+    font_path = 'data/BMDOHYEON_ttf.ttf'  # 다운로드한 한글 폰트 파일 경로
     
     wordcloud_keywords = WordCloud(width=800, height=800, 
                         font_path=font_path, 
@@ -112,12 +113,16 @@ with DAG('wordcloud_dag',
 
     create_wordcloud_task = PythonOperator(
         task_id='create_wordcloud',
-        python_callable=create_wordcloud
+        python_callable=create_wordcloud,
+        provide_context=True,
+        dag = dag
     )
 
     upload_to_s3_task = PythonOperator(
         task_id='upload_to_s3',
-        python_callable=upload_to_s3
+        python_callable=upload_to_s3,
+        provide_context=True,
+        dag=dag
     )
 
     create_wordcloud_task >> upload_to_s3_task

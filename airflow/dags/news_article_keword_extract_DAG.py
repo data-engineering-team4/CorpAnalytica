@@ -6,7 +6,6 @@ from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOp
 from airflow.models import XCom
 
 from datetime import datetime, timedelta
-import datetime
 import pendulum
 import logging
 import pandas as pd
@@ -28,12 +27,12 @@ default_args = {
     'retries': 1,
     'retry_delay': timedelta(minutes=2)
     #'on_failure_callback': slack_web_hook.on_failure_callback,
-    # 'on_success_callback': slack_web_hook.on_success_callback,
+    #'on_success_callback': slack_web_hook.on_success_callback,
 }
 
 with DAG(
         dag_id='news_article_keword_extract_DAG',
-        start_date=datetime.datetime(2023, 8, 25, tzinfo=local_timezone),
+        start_date=datetime(2023, 8, 25, tzinfo=local_timezone),
         max_active_runs=1,
         default_args=default_args,
         catchup=False
@@ -43,8 +42,9 @@ with DAG(
     def get_news_keyword_data_from_news(**kwargs):
 
         redshift_conn_id = 'Redshift_conn'
-        #logical_date_kst = kwargs['logical_date'] + timedelta(hours=9)
-        logical_date_kst = "2023-07-28"
+        logical_date_utc = datetime.now()
+        logical_date_kst = (logical_date_utc - timedelta(days=1) + timedelta(hours=9)).strftime("%Y-%m-%d")
+        logging.info(logical_date_kst)
         
         sql_query = f"""select na.corpname, na.link, art.article, art.id
                     from raw_data.naver_news as na, raw_data.news_article as art
@@ -72,11 +72,10 @@ with DAG(
             #print(corpname)
             link = row[1]
             article = row[2]
-            logging.info("1")
             sentences = text2sentences(article)
-            logging.info("2")
+            logging.info("문장 추출 완료")
             nouns = get_nouns(corpname, sentences)
-            logging.info("3")
+            logging.info("단어 추출 완료")
             sent_graph = build_sent_graph(nouns)
             logging.info("4")
             words_graph, idx2word = build_words_graph(nouns)
@@ -132,15 +131,13 @@ with DAG(
         return result
     '''
     def text2sentences(text):  
-        logging.info("아니")
         sentences = split_sentences(text) #text일 때 문장별로 리스트 만듦
-        logging.info("제발")
+        logging.info(sentences)
         for idx in range(0, len(sentences)):  #길이에 따라 문장 합침(위와 동일)
             if len(sentences[idx]) <= 10:
                 sentences[idx-1] += (' ' + sentences[idx])
                 sentences[idx] = ''
-                logging.info("빨리좀")
-        logging.info("돼라")
+        logging.info(sentences[:3])
         return sentences
 
     # 단어 추출
