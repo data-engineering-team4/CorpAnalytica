@@ -1,6 +1,6 @@
 from .models import *
 
-ANALYTICS_MODELS = [test_table]
+ANALYTICS_MODELS = [corp_total_info]
 
 class MultiDBRouter(object):
 

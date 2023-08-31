@@ -59,7 +59,7 @@ class naver_news(models.Model):
     title = models.CharField(max_length=500, null=False)
     link = models.CharField(max_length=500, null=False)
     description = models.CharField(max_length=1000)
-    date = models.DateField
+    pubdate = models.DateField()
 
     class Meta:
         managed = False
@@ -97,13 +97,20 @@ class news_keyword(models.Model):
     def __str__(self):
         return self.id
 
-class test_table(models.Model):
-    corpname = models.CharField(max_length=50, null=False, primary_key=True)
-    keyword = models.CharField(max_length=255, null=False)
+class corp_total_info(models.Model):
+    crno = models.CharField(max_length=256, primary_key=True)
+    entno = models.CharField(max_length=8)
+    corpname = models.CharField(max_length=256)
+    public_corpname = models.CharField(max_length=256)
+    owner = models.CharField(max_length=256)
+    address = models.CharField(max_length=513)
+    homepage_url = models.CharField(max_length=256)
+    phone_number = models.CharField(max_length=256)
+    keyword = models.CharField(max_length=255)
     
     class Meta:
         managed = False
-        db_table = 'test_table'
+        db_table = 'corp_total_info'
 
     def __str__(self):
         return self.corpname
