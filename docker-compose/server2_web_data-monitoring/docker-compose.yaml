@@ -3,11 +3,27 @@ services:
   web:
     build: 
       context: ../../CorpAnalytica_Web
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: gunicorn CorpAnalytica_Web.wsgi:application --bind 0.0.0.0:8000
+      # - python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
+    # expose:
+    #   - "8000"
     volumes:
       - ../../CorpAnalytica_Web:/app
+  
+  nginx:
+    image:
+      nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ../../CorpAnalytica_Web:/app
+      - ../../CorpAnalytica_Web/nginx:/etc/nginx/conf.d
+      - ../../CorpAnalytica_Web/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - web
+
 
   # statsd-exporter:
   #   image: prom/statsd-exporter:v0.21.0
