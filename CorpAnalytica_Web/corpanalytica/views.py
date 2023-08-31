@@ -25,8 +25,11 @@ def search_view(request):
                 # 키워드가 문자열 형태의 리스트이므로 eval 필요
                 if searched_corp.keyword:
                     stock_corps_keywords[searched_corp.entno] = eval(searched_corp.keyword)
+                    
+                    if len(stock_corps_keywords[searched_corp.entno]) > 7:
+                        stock_corps_keywords[searched_corp.entno] = stock_corps_keywords[searched_corp.entno][:7]
 
-            else : 
+            else: 
                 non_stock_corps_list.append(searched_corp)
 
         # 검색어가 포함된 뉴스(제목)

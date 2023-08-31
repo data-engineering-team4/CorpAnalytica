@@ -45,9 +45,9 @@
                     {% for naver_news_one in naver_news %}
                         <div class="article-box">
                             <a href='{{ naver_news_one.link }}'>
-                            <h3>{{ naver_news_one.title }}</h3>
+                            <h3>{{ naver_news_one.title |safe }}</h3>
                             </a>
-                            <p class="article-body">{{naver_news_one.description}}</p>
+                            <p class="article-body">{{naver_news_one.description |safe}}</p>
                             <p class="article-date">{{naver_news_one.pubdate}}</p>
                         </div>
                         <hr class="news-divison-line">
