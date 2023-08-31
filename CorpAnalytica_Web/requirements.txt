@@ -3,3 +3,4 @@ django-environ
 django_redshift_backend
 psycopg2-binary
 bootstrap4
+gunicorn
