@@ -11,8 +11,6 @@
 </head>
 <body>
 
-        <!-- render(request, 'search.html', {'searched': searched, 'stock_corps_list' : stock_corps_list, 'non_stock_corps_list' : non_stock_corps_list, 'searched_news_list' : searched_news_list}) -->
-
         <section class="search-section">
                 <form class="search-bar" method="POST" action="{% url 'search' %}">
                         {% csrf_token %}  
@@ -73,7 +71,7 @@
 
                         <!-- 뉴스결과 나열하기 -->
                         <ul class="news_list">
-                                {% for news in searched_news_list %}
+                                {% for news in searched_news_list%}
                                         <div class="article-box">
                                                 <a href='{{ news.link }}'><h3>{{ news.title |safe }}</h3></a>
                                                 <p class="article-body">{{news.description |safe}}</p>
