@@ -10,7 +10,6 @@ import pendulum
 import logging
 import pandas as pd
 from konlpy.tag import Okt, Mecab
-from kss import split_sentences
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import normalize
