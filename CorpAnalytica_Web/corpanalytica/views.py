@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
+from .utils import get_wordcloud
 
 def home_view(request):
     return render(request,'home.html')
@@ -50,6 +51,8 @@ def detail_view(request,entno):
     try:
         corp_keyword_object = corp_keyword.objects.get(corpname=corp.corpname)
         corp_keywords = eval(corp_keyword_object.keyword)
+
+        wordcloud_img = get_wordcloud(corp_keywords)
     except corp_keyword.DoesNotExist:
         corp_keywords = []
 
@@ -63,4 +66,5 @@ def detail_view(request,entno):
     except naver_news.DoesNotExist:
         naver_news_objects = []
 
-    return render(request, 'detail.html', {'corp' : corp, 'corp_keyword' : corp_keywords, 'naver_news': naver_news_objects})
+
+    return render(request, 'detail.html', {'corp' : corp, 'corp_keyword' : corp_keywords, 'naver_news': naver_news_objects, 'wordcloud_img' : wordcloud_img})
