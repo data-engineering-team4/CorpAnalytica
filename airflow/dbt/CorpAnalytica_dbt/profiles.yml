@@ -10,4 +10,3 @@ CorpAnalytica_dbt:
       schema: analytics
       threads: 1
       user: "{{ env_var('dbt_user') }}"
-

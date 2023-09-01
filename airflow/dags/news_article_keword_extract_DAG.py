@@ -3,6 +3,7 @@ from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.models import XCom
 
 from datetime import datetime, timedelta
@@ -61,20 +62,17 @@ with DAG(
 
         news_keyword_parquet_filename = f"data/news_keyword/news_keyword_{logical_date_kst}.parquet"        
         kwargs['ti'].xcom_push(key='news_keyword_parquet_filename', value=news_keyword_parquet_filename)
-        #logging.info(f"-- logical_date : {logical_date_kst} --\n-- 해당 날짜에서 뉴스 데이터를 가져옵니다. --")
+        logging.info(f"-- logical_date : {logical_date_kst} --\n-- 해당 날짜에서 뉴스 데이터를 가져옵니다. --")
 
         news_keyword_df = pd.DataFrame(columns = ['id','corpname','link','keywords','summary_sentence1','summary_sentence2','summary_sentence3'])
         news_keyword_list = []
-        #logging.info(f"총 {len(rows)}개의 기사")
+        logging.info(f"총 {len(rows)}개의 기사")
         for row in rows:
-            logging.info("0")
             corpname = row[0]
             #print(corpname)
             link = row[1]
             article = row[2]
-            logging.info("1")
             sentences = text2sentences(article)
-            logging.info("2")
             nouns = get_nouns(corpname, sentences)
             sent_graph = build_sent_graph(nouns)
             words_graph, idx2word = build_words_graph(nouns)
@@ -94,7 +92,7 @@ with DAG(
         news_keyword_df.to_parquet(news_keyword_parquet_filename, compression="gzip")
         logging.info(f"키워드 추출 완료")
             
-    
+    '''
     # 문장 분리하기
     def split_sentences(text, start, end, result):
         kkma = Kkma()
@@ -104,23 +102,19 @@ with DAG(
     # 스레드 생성하여 문장 분리 실행
     def text2sentences(text):
         # 스레드 개수 설정
-        num_threads = 2
+        num_threads = 4
         text_length = len(text)
         chunk_size = text_length // num_threads
 
         threads = []
         result = []
-        logging.info("?")
+
         # 스레드 생성 및 실행
         for i in range(num_threads):
             start = i * chunk_size
-            logging.info("??")
             end = (i + 1) * chunk_size if i != num_threads - 1 else text_length
-            logging.info("???")
             thread = threading.Thread(target=split_sentences, args=(text, start, end, result))
-            logging.info("????")
             thread.start()
-            logging.info("?????")
             threads.append(thread)
 
         # 모든 스레드 종료 대기
@@ -138,7 +132,6 @@ with DAG(
                 sentences[idx] = ''
         return sentences
         #logging.info(sentences[:3])
-    '''
     # 단어 추출
     def get_nouns(corpname, sentences):
         okt = Okt() 
@@ -260,4 +253,16 @@ with DAG(
         dag = dag
     )
 
-    get_news_keyword_data_from_news_task >> upload_news_keyword_parquet_to_s3_task >> news_keyword_s3_to_redshift_task
+    trigger_wordcloud_dag_task = TriggerDagRunOperator(
+        task_id='trigger_wordcloud_dag_task',
+        trigger_dag_id='wordcloud_dag',
+        execution_date="{{ execution_date }}"
+    )
+
+    trigger_DBT_dag_task = TriggerDagRunOperator(
+        task_id='trigger_DBT_dag_task',
+        trigger_dag_id='make_src_and_dbt_test_DAG',
+        execution_date="{{ execution_date }}"
+    )
+
+    get_news_keyword_data_from_news_task >> upload_news_keyword_parquet_to_s3_task >> news_keyword_s3_to_redshift_task >> [trigger_wordcloud_dag_task, trigger_DBT_dag_task]
