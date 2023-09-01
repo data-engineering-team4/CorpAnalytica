@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import pendulum
 import logging
 import pandas as pd
-from konlpy.tag import Okt, Mecab
+from konlpy.tag import Okt, Kkma
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import normalize
@@ -30,12 +30,12 @@ default_args = {
 }
 
 with DAG(
-        dag_id='news_article_keword_extract_DAG',
+        dag_id='news_article_keyword_extract_DAG',
         start_date=datetime(2023, 8, 25, tzinfo=local_timezone),
         max_active_runs=1,
         default_args=default_args,
         catchup=False
-) as dag:    
+) as dag:   
 
     # 네이버 뉴스 csv 파일로부터 링크를 읽어서 뉴스 키워드 추출
     def get_news_keyword_data_from_news(**kwargs):
@@ -72,23 +72,15 @@ with DAG(
             link = row[1]
             article = row[2]
             sentences = text2sentences(article)
-            logging.info("문장 추출 완료")
             nouns = get_nouns(corpname, sentences)
-            logging.info("단어 추출 완료")
             sent_graph = build_sent_graph(nouns)
-            logging.info("4")
             words_graph, idx2word = build_words_graph(nouns)
-            logging.info("5")
             sent_rank_idx = get_ranks(sent_graph)  #sent_graph : sentence 가중치 그래프
             sorted_sent_rank_idx = sorted(sent_rank_idx, key=lambda k: sent_rank_idx[k], reverse=True)
-            logging.info("6")
             word_rank_idx = get_ranks(words_graph)
             sorted_word_rank_idx = sorted(word_rank_idx, key=lambda k: word_rank_idx[k], reverse=True)
-            logging.info("7")
             sum_sentence = summarize(sorted_sent_rank_idx, sentences)
-            logging.info("8")
             sum_keyword = keywords(sorted_word_rank_idx, idx2word)
-            logging.info("9")
             idx = row[3]
 
             new_row = [idx, corpname, link, sum_keyword, sum_sentence[0], sum_sentence[1], sum_sentence[2]]
@@ -99,9 +91,10 @@ with DAG(
         news_keyword_df.to_parquet(news_keyword_parquet_filename, compression="gzip")
         logging.info(f"키워드 추출 완료")
             
-    '''
+    
     # 문장 분리하기
     def split_sentences(text, start, end, result):
+        kkma = Kkma()
         sentences = kkma.sentences(text[start:end])
         result.extend(sentences)
     
@@ -130,19 +123,22 @@ with DAG(
         return result
     '''
     def text2sentences(text):  
-        sentences = split_sentences(text) #text일 때 문장별로 리스트 만듦
-        logging.info(sentences)
+        kiwi = Kiwi() 
+        sentences = []
+        for i in kiwi.split_into_sents(text):
+            sentences.append(i[0])
+        #logging.info(sentences)
         for idx in range(0, len(sentences)):  #길이에 따라 문장 합침(위와 동일)
             if len(sentences[idx]) <= 10:
                 sentences[idx-1] += (' ' + sentences[idx])
                 sentences[idx] = ''
-        logging.info(sentences[:3])
+        #logging.info(sentences[:3])
         return sentences
-
+    '''
     # 단어 추출
     def get_nouns(corpname, sentences):
+        okt = Okt() 
         nouns = []
-        okt = Okt()
         stopwords = ['머니투데이' , "연합뉴스", "데일리", "동아일보", "중앙일보", "조선일보", "기자","아", "휴", "아이구", "대한", "이번",
                 "아이쿠", "아이고", "어", "나", "우리", "저희", "따라", "의해", "을", "를", "에", "의", "가", "기업", "트진", "위해",
                 "지금", "말씀", "지난", "올해"]
