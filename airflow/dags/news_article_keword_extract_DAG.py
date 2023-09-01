@@ -131,7 +131,6 @@ with DAG(
                 sentences[idx] = ''
         return sentences
         #logging.info(sentences[:3])
-        return sentences
     # 단어 추출
     def get_nouns(corpname, sentences):
         okt = Okt() 
