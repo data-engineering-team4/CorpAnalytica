@@ -5,11 +5,9 @@ CorpAnalytica_dbt:
       type: postgres
       dbname: dev
       host: de-4-3-redshift.862327261051.us-west-2.redshift-serverless.amazonaws.com
-      #password: "Team-4-3"
       password: "{{ env_var('dbt_password') }}"
       port: 5439
       schema: analytics
       threads: 1
-      #user: "DE-4-3"
       user: "{{ env_var('dbt_user') }}"
 
