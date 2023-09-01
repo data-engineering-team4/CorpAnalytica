@@ -330,7 +330,6 @@ services:
     image: prom/node-exporter
     ports:
       - 9200:9100
-    # restarts: always
 
 volumes:
   postgres-db-volume:
