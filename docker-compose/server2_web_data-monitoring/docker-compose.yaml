@@ -18,6 +18,8 @@ services:
     
     volumes:
       - ../../CorpAnalytica_Web:/app
+    networks:
+      -  internal
 
 
   fluentd:
@@ -29,6 +31,8 @@ services:
     ports:
       - "24224:24224"
       - "24224:24224/udp"
+    networks:
+      -  internal
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.1.2
@@ -75,6 +79,7 @@ services:
     restart: always
     ports:
       - 3000:3000
+  
 
 volumes:
   prometheus_data:
