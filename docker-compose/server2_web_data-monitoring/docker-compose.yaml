@@ -13,8 +13,6 @@ services:
   #       tag: httpd.access
 
   web:
-    env_file:
-      - ../../.env
     build: 
       context: ../../CorpAnalytica_Web
     command: python3 manage.py runserver 0.0.0.0:8000 
