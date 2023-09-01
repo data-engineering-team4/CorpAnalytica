@@ -82,7 +82,7 @@ x-airflow-common:
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
     # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pyarrow scikit-learn apache-airflow-providers-common-sql[pandas] konlpy}
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- konlpy typing pandas statsd scikit-learn wordcloud dbt-redshift==1.5.5}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- konlpy typing pandas statsd scikit-learn wordcloud dbt-redshift}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/logs:/opt/airflow/logs
