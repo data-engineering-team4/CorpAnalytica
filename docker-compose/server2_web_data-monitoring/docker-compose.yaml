@@ -27,24 +27,6 @@ services:
       - web
 
 
-  # statsd-exporter:
-  #   image: prom/statsd-exporter:v0.21.0
-  #   volumes:
-  #     - ../../data-monitoring/configs/statsd.yaml:/home/statsd-mapping-configs.yaml
-  #   entrypoint: ["/bin/sh", "-c", "--"]
-  #   command: ["statsd_exporter --log.level debug --statsd.mapping-config=/home/statsd-mapping-configs.yaml"]
-  #   ports:
-  #     - 9102:9102   # scrape port
-  #     - 9125:9125   # ingest port
-  #   restart: always
-
-  # node-exporter:
-  #   image: prom/node-exporter
-  #   ports:
-  #     - 9200:9100
-  #   # restarts: always
-
-
   prometheus:
     image: prom/prometheus:v2.26.0
     volumes:
