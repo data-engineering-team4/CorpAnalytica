@@ -18,9 +18,6 @@ services:
     
     volumes:
       - ../../CorpAnalytica_Web:/app
-    networks:
-      -  internal
-
 
   fluentd:
     build: ../../fluentd
@@ -31,8 +28,6 @@ services:
     ports:
       - "24224:24224"
       - "24224:24224/udp"
-    networks:
-      -  internal
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.1.2
