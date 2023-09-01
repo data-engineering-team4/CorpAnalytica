@@ -92,7 +92,7 @@ with DAG(
         news_keyword_df.to_parquet(news_keyword_parquet_filename, compression="gzip")
         logging.info(f"키워드 추출 완료")
             
-    
+    '''
     # 문장 분리하기
     def split_sentences(text, start, end, result):
         kkma = Kkma()
@@ -124,18 +124,14 @@ with DAG(
         return result
     '''
     def text2sentences(text):  
-        kiwi = Kiwi() 
-        sentences = []
-        for i in kiwi.split_into_sents(text):
-            sentences.append(i[0])
-        #logging.info(sentences)
+        kkma = Kkma()
+        sentences = kkma.sentences(text)  #text일 때 문장별로 리스트 만듦
         for idx in range(0, len(sentences)):  #길이에 따라 문장 합침(위와 동일)
             if len(sentences[idx]) <= 10:
                 sentences[idx-1] += (' ' + sentences[idx])
                 sentences[idx] = ''
-        #logging.info(sentences[:3])
         return sentences
-    '''
+        #logging.info(sentences[:3])
     # 단어 추출
     def get_nouns(corpname, sentences):
         okt = Okt() 
