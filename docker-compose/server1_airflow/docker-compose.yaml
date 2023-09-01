@@ -50,7 +50,7 @@ x-airflow-common:
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.6.3-python3.8}
+  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.7.0}
   build: ../../airflow
   environment:
     &airflow-common-env
@@ -82,7 +82,7 @@ x-airflow-common:
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
     # _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pyarrow scikit-learn apache-airflow-providers-common-sql[pandas] konlpy}
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- konlpy typing pandas statsd scikit-learn wordcloud dbt-redshift}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- konlpy typing pandas statsd scikit-learn wordcloud dbt-redshift==1.5.5}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-../../airflow}/logs:/opt/airflow/logs
