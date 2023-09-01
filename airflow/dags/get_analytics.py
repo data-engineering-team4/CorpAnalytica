@@ -23,7 +23,7 @@ with DAG(
 
     get_analytics = BashOperator(
         task_id='get_analytics',
-        bash_command='cd /DBT/CorpAnalytica_dbt && dbt run --profiles-dir .',
+        bash_command='cd /dbt/CorpAnalytica_dbt && dbt run --profiles-dir .',
         env={
             'dbt_user': '{{ var.value.dbt_redshift_user }}',
             'dbt_password': '{{ var.value.dbt_redshift_password }}',
