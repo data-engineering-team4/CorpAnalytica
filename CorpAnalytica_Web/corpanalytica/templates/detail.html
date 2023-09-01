@@ -58,8 +58,7 @@
         <h1 class="detail-title">주식</h1>
 
             <div class="detail-item">
-
-                <img class="finance-chart" src="{% static 'img/wordcloud1.png' %}">
+                <img src="data:image/png;base64, {{ wordcloud_img|safe }}" alt="" id="img">
             </div>
 
         <h1 class="detail-title">다른 기업</h1>
