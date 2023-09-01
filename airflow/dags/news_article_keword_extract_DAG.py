@@ -3,6 +3,7 @@ from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.models import XCom
 
 from datetime import datetime, timedelta
@@ -252,4 +253,16 @@ with DAG(
         dag = dag
     )
 
-    get_news_keyword_data_from_news_task >> upload_news_keyword_parquet_to_s3_task >> news_keyword_s3_to_redshift_task
+    trigger_wordcloud_dag_task = TriggerDagRunOperator(
+        task_id='trigger_wordcloud_dag_task',
+        trigger_dag_id='wordcloud_dag',
+        execution_date="{{ execution_date }}"
+    )
+
+    trigger_DBT_dag_task = TriggerDagRunOperator(
+        task_id='trigger_DBT_dag_task',
+        trigger_dag_id='make_src_and_dbt_test_DAG',
+        execution_date="{{ execution_date }}"
+    )
+
+    get_news_keyword_data_from_news_task >> upload_news_keyword_parquet_to_s3_task >> news_keyword_s3_to_redshift_task >> [trigger_wordcloud_dag_task, trigger_DBT_dag_task]
