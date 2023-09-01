@@ -1,0 +1,53 @@
+version: 2
+models:
+  - name: src_corp_basic
+    columns:
+    - name: entno
+      tests:
+        - unique
+        - not_null
+    - name: corpname
+      tests:
+        - not_null
+
+  - name: src_corp_detail
+    columns:
+    - name: crno
+      tests:
+        - not_null
+    - name: corpnm
+      tests:
+        - not_null
+
+  - name: src_corp_keyword
+    columns:
+    - name: corpname
+      tests:
+        - unique
+        - not_null
+
+  - name: src_naver_news
+    columns:
+    - name: id
+      tests:
+        - not_null
+    - name: link
+      tests:
+        - not_null
+
+  - name: src_news_article
+    columns:
+    - name: id
+      tests:
+        - unique
+        - not_null
+    - name: link
+      tests:
+        - not_null
+
+  - name: src_news_keyword
+    columns:
+    - name: id
+      tests:
+        - unique
+        - not_null
