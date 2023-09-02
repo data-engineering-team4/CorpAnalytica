@@ -62,12 +62,14 @@ def create_wordcloud(**kwargs):
     
     wordcloud_keywords = WordCloud(width=800, height=800, 
                         font_path=font_path, 
-                        background_color='gray', 
+                        background_color=None, # 투명
+                        mode = "RGBA", # 투명
                         colormap = 'autumn').generate_from_frequencies(keywords_count)
     
     wordcloud_corps = WordCloud(width=800, height=800, 
                         font_path=font_path, 
-                        background_color='gray', 
+                        background_color=None, # 투명
+                        mode = "RGBA", # 투명 
                         colormap = 'spring').generate_from_frequencies(corps_count)
     
     logical_date_kst = kwargs['logical_date'] + timedelta(hours=9)
