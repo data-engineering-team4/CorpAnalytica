@@ -23,7 +23,7 @@ default_args = {
 def query_redshift_to_dataframe():
     redshift_conn_id = 'Redshift_conn'  # Airflow Connection ID for Redshift
     logical_date_utc = datetime.now()
-    logical_date_kst = (logical_date_utc + timedelta(hours=9) - timedelta(days=1)).strftime("%Y-%m-%d")
+    logical_date_kst = (logical_date_utc + timedelta(hours=9) - timedelta(days=30)).strftime("%Y-%m-%d")
     logging.info(logical_date_kst)
     #sql_query = f"select ne.keyword from raw_data.news_keyword ne, raw_data.naver_news na where ne.corpname = na.corpname and na.pubdate like '{str(logical_date_kst)}%';"
     sql_query1 = f"""select REPLACE(REPLACE(REPLACE(ne.keyword, '[', ''), ']', ''), '''', '') AS cleaned_string
@@ -64,15 +64,15 @@ def create_wordcloud(**kwargs):
                         font_path=font_path, 
                         background_color=None, # 투명
                         mode = "RGBA", # 투명
-                        colormap = 'autumn').generate_from_frequencies(keywords_count)
+                        colormap = 'PuBu').generate_from_frequencies(keywords_count)
     
     wordcloud_corps = WordCloud(width=800, height=800, 
                         font_path=font_path, 
                         background_color=None, # 투명
                         mode = "RGBA", # 투명 
-                        colormap = 'spring').generate_from_frequencies(corps_count)
+                        colormap = 'PuBu').generate_from_frequencies(corps_count)
     
-    logical_date_kst = kwargs['logical_date'] + timedelta(hours=9)
+    logical_date_kst = kwargs['logical_date'] + timedelta(hours=9) - timedelta(days=1)
 
     news_wordcloud_png_filename = "data/news_wordcloud/news_wordcloud_" + str(logical_date_kst.date()) + ".png"
     corp_wordcloud_png_filename = "data/news_wordcloud/corp_wordcloud_" + str(logical_date_kst.date()) + ".png"    
