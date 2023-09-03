@@ -60,13 +60,13 @@ def create_wordcloud(**kwargs):
 
     font_path = 'data/BMDOHYEON_ttf.ttf'  # 다운로드한 한글 폰트 파일 경로
     
-    wordcloud_keywords = WordCloud(width=800, height=800, 
+    wordcloud_keywords = WordCloud(width=1600, height=900, 
                         font_path=font_path, 
                         background_color=None, # 투명
                         mode = "RGBA", # 투명
                         colormap = 'PuBu').generate_from_frequencies(keywords_count)
     
-    wordcloud_corps = WordCloud(width=800, height=800, 
+    wordcloud_corps = WordCloud(width=1600, height=900, 
                         font_path=font_path, 
                         background_color=None, # 투명
                         mode = "RGBA", # 투명 

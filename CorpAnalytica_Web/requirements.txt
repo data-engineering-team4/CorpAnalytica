@@ -8,3 +8,4 @@ matplotlib
 wordcloud
 finance-datareader
 beautifulsoup4
+bs4
