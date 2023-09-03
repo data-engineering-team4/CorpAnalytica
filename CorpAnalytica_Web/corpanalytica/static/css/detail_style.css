@@ -112,16 +112,6 @@ body {
     display: flex;
 }
 
-.corp-detail-section .detail-item .keyword-list{
-    display: flex;
-    margin-top: 20px;
-    /* padding: 0px 10px 0px 10px */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px
-}
-
 .corp-detail-section .detail-item .news-list{
     display: flex;
     margin-top: 20px;
@@ -130,7 +120,7 @@ body {
 }
 
 .article-box{
-    width: 100%;
+    width: 90%;
     padding: 15px;
 }
 
@@ -139,6 +129,7 @@ body {
     overflow: hidden; 
     margin: 0 auto; 
     height: fit-content;
+    flex: 1;
 }
 
 .article-box .article-date{
@@ -161,9 +152,9 @@ body {
 }
 
 .corp-detail-section .detail-item .another-corp-list-box{
-    border: 4px solid black;
+    border: 4px solid gray;
     border-radius: 12px;
-    width: 700px;
+    width: 80%;
     height: 100px;
     justify-content: center;
     align-items: center;
@@ -177,8 +168,10 @@ body {
 }
 
 .another-corp-list-box .another-corp-box{
-    border: 3px solid black;
-    background-color: aqua;
+    border: none;
+    background-color: rgb(53, 53, 219); /* 파란색 배경 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    color: white; /* 흰색 글자 색상 */
     border-radius: 12px;
     width: fit-content;
     height: 50%;
