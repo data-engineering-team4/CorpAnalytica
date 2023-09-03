@@ -287,10 +287,10 @@ with DAG(
         dag = dag
     )
 
-    trigger_news_article_keword_extract_task = TriggerDagRunOperator(
-        task_id='trigger_news_article_keword_extract_task',
-        trigger_dag_id='news_article_keword_extract_DAG',
+    trigger_news_article_keyword_extract_task = TriggerDagRunOperator(
+        task_id='trigger_news_article_keyword_extract_task',
+        trigger_dag_id='news_article_keyword_extract_DAG',
         execution_date="{{ execution_date }}"
     )
 
-    get_news_article_crawling_parquet_task >> upload_news_article_parquet_to_s3_task >> news_article_crawling_s3_to_redshift_task >> trigger_news_article_keword_extract_task
+    get_news_article_crawling_parquet_task >> upload_news_article_parquet_to_s3_task >> news_article_crawling_s3_to_redshift_task >> trigger_news_article_keyword_extract_task
