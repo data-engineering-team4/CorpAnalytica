@@ -62,6 +62,16 @@
     align-items: center;
 }
 
+.sub-section .wordcloud-wrap hr{
+    border-top: 1px solid #444444;
+    height: 200px;
+    width: 3px;
+}
+
+.sub-section .wordcloud-wrap h3{
+    text-align: center;
+}
+
 .search-bar {
     display: flex;
     align-items: center;
@@ -81,7 +91,6 @@
     /* font-weight: bold; */
     border: none;
     outline: none;
-    font-family: SDSBasic;
 }
 
 .search-bar .search-button {
@@ -115,11 +124,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 45px
+    gap: 45px;
 }
 
-.sub-section .wordcloud-wrap img {
-    width: 45%;
+.sub-section .wordcloud-wrap ul img{
+    margin-top: 30px;
+    width: 600px;
 }
 
 

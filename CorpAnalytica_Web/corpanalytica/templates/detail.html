@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load custom_tags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -32,14 +33,11 @@
         <h1 class="detail-title">키워드</h1>
 
             <div class="detail-item">
-                <ul class="keyword-list">
-                    {% for keyword in corp_keyword %}
-                        <p>{{ keyword }}</p>
-                    {% endfor %}
-                </ul>
+                <img src="data:image/png;base64, {{ wordcloud_img|safe }}" alt="" id="wordcloud_img">
             </div>
 
         <h1 class="detail-title">기사</h1>
+
             <div class="detail-item">
                 <ul class="news_list">
                     {% for naver_news_one in naver_news %}
@@ -58,20 +56,16 @@
         <h1 class="detail-title">주식</h1>
 
             <div class="detail-item">
-                <img src="data:image/png;base64, {{ wordcloud_img|safe }}" alt="" id="img">
+                <img src="data:image/png;base64, {{ stock_graph_img|safe }}" alt="" id="stock_graph_img">
             </div>
 
-        <h1 class="detail-title">다른 기업</h1>
+        <h1 class="detail-title">비슷한 키워드를 가진 기업</h1>
 
             <div class="detail-item">
                 <div class="another-corp-list-box">
-                    <div class="another-corp-box">삼성엔지니어링</div>
-                    <div class="another-corp-box">삼성SDI</div>
-                    <div class="another-corp-box">삼성전기</div>
-                    <div class="another-corp-box">삼성생명</div>
-                    <div class="another-corp-box">삼성카드</div>
-                    <div class="another-corp-box">삼성SDS</div>
-
+                    {% for corp in related_corp_list %}
+                        <div class="another-corp-box">{{corp.related_name}}</div>
+                    {% endfor %}
                 </div>
             </div>
         

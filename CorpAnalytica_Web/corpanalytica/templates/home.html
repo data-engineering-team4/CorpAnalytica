@@ -28,8 +28,15 @@
 
         <div class="wordcloud-wrap">
             <ul>
-                <img class="keyword_best_wc" src="{% static 'img/wordcloud1.png' %}">
-                <img class="article_best_wc" src="{% static 'img/wordcloud2.png' %}">
+                <div>
+                    <h3>최근 뉴스기사가 많이 나온 기업</h3>
+                    <img class="keyword_best_wc" src="{{corp_wordcloud_url}}", alt="최근 뉴스기사가 많이 나온 기업">
+                </div>
+                <hr class="img-divison-line">
+                <div>
+                    <h3>최근 가장 많이 언급된 키워드</h3>
+                    <img class="article_best_wc" src="{{news_wordcloud_url}}", alt="최근 가장 많이 언급된 키워드">
+                </div>
             </ul>
         </div>
 

@@ -11,6 +11,7 @@ model_list = [
     news_article,
     news_keyword,
     corp_total_info,
+    related_corp,
 ]
 
 admin.site.register(model_list)

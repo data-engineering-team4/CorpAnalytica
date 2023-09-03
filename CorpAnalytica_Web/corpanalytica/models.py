@@ -114,3 +114,15 @@ class corp_total_info(models.Model):
 
     def __str__(self):
         return self.corpname
+    
+class related_corp(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    corpname = models.CharField(max_length=50)
+    related_name = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'related_corp'
+
+    def __str__(self):
+        return self.id

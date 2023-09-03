@@ -6,3 +6,4 @@ bootstrap4
 gunicorn
 matplotlib
 wordcloud
+FinanceDataReader
