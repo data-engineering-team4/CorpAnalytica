@@ -7,3 +7,4 @@ gunicorn
 matplotlib
 wordcloud
 finance-datareader
+beautifulsoup4
