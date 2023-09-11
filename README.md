@@ -13,7 +13,6 @@
 
 ### 개발 기간
 - 23.08.07 ~ 23.09.05 (4주)
-<br>
 
 ### 팀원 소개 및 역할
 |  이름  | 역할 | GitHub | 
@@ -36,16 +35,22 @@
 
 ## 🏛️ Architecture
 ![Architecture](https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/baef5021-01e5-404a-b8f8-122fe94b99e5)
+<br>
 
 ## 🧩 ERD
 ![ERD](https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/315832b5-ae54-4f98-a394-85dec4bd0ebc)
+<br>
 
 ## 🎁 결과 화면
+<img width="1680" alt="스크린샷 2023-09-04 오후 4 32 40" src="https://github.com/SikHyeya/CorpAnalytica/assets/123959802/d8d1f5e0-573c-47a8-981e-a378784f4f75">
+<img width="1680" alt="스크린샷 2023-09-04 오후 4 33 10" src="https://github.com/SikHyeya/CorpAnalytica/assets/123959802/c981ffa1-7849-4b07-8af9-2e70ef2bc9df">
+<img width="1680" alt="스크린샷 2023-09-04 오후 4 33 15" src="https://github.com/SikHyeya/CorpAnalytica/assets/123959802/f55322df-51b9-4d63-8083-58fd2f9e5c5e">
+<br>
 
 ## 💊 TO DO
 - 주식데이터 kafka를 사용하여 실시간 처리 후 적재하여 인사이트 도출
 - 컨테이너 오케스트레이션 시스템 도입
 - EFK 스택 도입하여 로그데이터 수집을 통한 인사이트 도출
-
+<br>
 
 
