@@ -1,10 +1,12 @@
-![logo](https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/f7402690-9035-44bf-a646-3c87815bb3b2)
-<img src="https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/f7402690-9035-44bf-a646-3c87815bb3b2" width='150' >
+<div align='center'>
+<img src="https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/f7402690-9035-44bf-a646-3c87815bb3b2" width='350' >
+</div>
+
 # CorpAnalytica
 ### 뉴스 기사를 기반으로 한 기업 분석 웹사이트 구축
 <br>
 
-## ✔️프로젝트 개요
+## ✔️ 프로젝트 개요
 ### 목적
 수 많은 국내 기업들 중 내가 관심있는 기업의 최근 동향을 해당 기업의 뉴스 기사를 통해 추출한 키워드와 주식 데이터로 파악할 수 있다.
 <br>
@@ -31,3 +33,19 @@
 | CI/CD | <img src="https://img.shields.io/badge/githubactions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white"> <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">||
 | Tools | <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">||
 <br>
+
+## 🏛️ Architecture
+![Architecture](https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/baef5021-01e5-404a-b8f8-122fe94b99e5)
+
+## 🧩 ERD
+![ERD](https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/315832b5-ae54-4f98-a394-85dec4bd0ebc)
+
+## 🎁 결과 화면
+
+## 💊 TO DO
+- 주식데이터 kafka를 사용하여 실시간 처리 후 적재하여 인사이트 도출
+- 컨테이너 오케스트레이션 시스템 도입
+- EFK 스택 도입하여 로그데이터 수집을 통한 인사이트 도출
+
+
+
