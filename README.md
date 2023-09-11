@@ -1,4 +1,5 @@
 ![logo](https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/f7402690-9035-44bf-a646-3c87815bb3b2)
+<img src="https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/f7402690-9035-44bf-a646-3c87815bb3b2" width='150' >
 # CorpAnalytica
 ### 뉴스 기사를 기반으로 한 기업 분석 웹사이트 구축
 <br>
