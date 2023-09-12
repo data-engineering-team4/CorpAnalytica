@@ -18,8 +18,8 @@
 |  이름  | 역할 | GitHub | 
 | :---: | :---: | :--- |
 | 김승언 | AWS 환경 세팅 및 인프라 구성, 데이터 수집 및 적재, ETL, 백엔드 | [@SikHyeya](https://github.com/SikHyeya) |
-| 김선호 | AWS 환경 세팅 및 인프라 구성, 데이터 수집 및 적재, ETL, ELT, 데이터 모니터링, 프론트엔드, 백엔드 | [@sunhokim1457](https://github.com/sunhokim1457) |
-| 김지석 | AWS 환경 세팅 및 인프라 구성, 데이터 수집 및 적재, ETL, ELT, 프론트엔드, 백엔드, 자연어처리 | [@plays0708](https://github.com/plays0708) |
+| 김선호 | 데이터 수집 및 적재, ETL, ELT, 데이터 모니터링, 프론트엔드, 백엔드 | [@sunhokim1457](https://github.com/sunhokim1457) |
+| 김지석 | AWS 환경 세팅 및 인프라 구성, 데이터 수집 및 적재, ETL, ELT, 자연어처리 | [@plays0708](https://github.com/plays0708) |
 <br>
 
 ## ⚒️ Tech Stack
