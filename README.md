@@ -42,9 +42,7 @@
 <br>
 
 ## 🎁 결과 화면
-<img width="1680" alt="스크린샷 2023-09-04 오후 4 32 40" src="https://github.com/SikHyeya/CorpAnalytica/assets/123959802/d8d1f5e0-573c-47a8-981e-a378784f4f75">
-<img width="1680" alt="스크린샷 2023-09-04 오후 4 33 10" src="https://github.com/SikHyeya/CorpAnalytica/assets/123959802/c981ffa1-7849-4b07-8af9-2e70ef2bc9df">
-<img width="1680" alt="스크린샷 2023-09-04 오후 4 33 15" src="https://github.com/SikHyeya/CorpAnalytica/assets/123959802/f55322df-51b9-4d63-8083-58fd2f9e5c5e">
+![result](https://github.com/data-engineering-team4/CorpAnalytica/assets/123959802/2f62e9cf-1232-46c0-849f-a1f3a5def8a8)
 <br>
 
 ## 💊 TO DO
